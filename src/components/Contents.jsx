@@ -20,6 +20,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../service/firebase";
+import { doc } from "firebase/firestore";
 const Main = styled.main`
   padding: 20px;
   background: #eee;
@@ -87,6 +88,7 @@ const CommentButton = styled.button`
 `;
 function Contents() {
   const [comment, setComment] = useState();
+  const [ ,setLikeCounts] = useState([])
   const [likeCount, setLikeCount] = useState(false);
   const [comments, setComments] = useState([]);
   const [editCommentId, setEditCommentId] = useState("");
@@ -114,25 +116,51 @@ function Contents() {
   }, []);
 
   //Like 함수 부분 빼놨습니다!
-  const handleLike = async () => {
-    try {
-      const snapshot = await Firestore.collection("").doc("").get();
-      let currentCount = 0;
-      if (snapshot.exists) {
-        const data = snapshot.data();
-        currentCount = data.likeCount || 0;
-      }
-      await Firestore.collection("")
-        .doc("")
-        .update({
-          likeCount: currentCount + 1,
-        });
-
-      setLikeCount(currentCount + 1);
-    } catch (error) {
-      console.error("Error updating like count:", error);
-    }
+ // 데이터 가져오기
+ useEffect(() => {
+  const fetchData = async () => {
+    const q = query(collection(db, "like"));
+    const querySnapshot = await getDocs(q);
+    const initialContents = [];
+    querySnapshot.forEach((doc) => {
+      initialContents.push({ id: doc.id, ...doc.data() });
+    });
+    setLikeCounts(initialContents);
+    const contentData = initialContents.find((item) => item.id === "likeCount");
+    setLikeCount(contentData);
   };
+  fetchData();
+}, []);
+
+// Like update
+const updateLike = async (event) => {
+  const contentRef = doc(db, "likes", "likeCount");
+
+  if (likeCount.isLike) {
+    // 이미 좋아요가 눌린 상태인 경우, 좋아요 취소 처리
+    await updateDoc(contentRef, {
+      isLike: false,
+      likeCount: likeCount.likeCount - 1,
+    });
+    setLikeCount((prevContent) => ({
+      ...prevContent,
+      isLike: !prevContent.isLike,
+      likeCount: prevContent.likeCount - 1,
+    }));
+  } else {
+    // 좋아요가 눌리지 않은 상태인 경우, 좋아요 처리
+    await updateDoc(contentRef, {
+      isLike: true,
+      likeCount: likeCount.likeCount + 1,
+    });
+    setLikeCount((prevContent) => ({
+      ...prevContent,
+      isLike: !prevContent.isLike,
+      likeCount: prevContent.likeCount + 1,
+    }));
+  }
+};
+
 
   //입력시 DB에 저장하는 함수
   const handleCommentSubmit = async (event) => {
@@ -247,7 +275,7 @@ function Contents() {
           <FunctionUl>
             <li>
               <IconSpan>
-                <FontAwesomeIcon icon={faHeart} onClick={handleLike} />
+                <FontAwesomeIcon icon={faHeart} onClick={updateLike} />
               </IconSpan>
               {likeCount}
             </li>
