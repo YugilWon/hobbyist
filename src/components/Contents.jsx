@@ -89,7 +89,7 @@ const CommentButton = styled.button`
 function Contents() {
   const [comment, setComment] = useState();
   const [ ,setLikeCounts] = useState([])
-  const [likeCount, setLikeCount] = useState(false);
+  const [likeCount, setLikeCount] = useState([]);
   const [comments, setComments] = useState([]);
   const [editCommentId, setEditCommentId] = useState("");
   const [editedComment, setEditedComment] = useState("");
@@ -126,6 +126,7 @@ function Contents() {
       initialContents.push({ id: doc.id, ...doc.data() });
     });
     setLikeCounts(initialContents);
+    console.log(initialContents)
     const contentData = initialContents.find((item) => item.id === "likeCount");
     setLikeCount(contentData);
   };
