@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import { styled } from "styled-components";
 import { db } from "../service/firebase";
 import { getAuth } from "firebase/auth";
-import { useParams } from "react-router-dom";
 import {
   collection,
   getDocs,
@@ -25,17 +24,13 @@ const ContentFunc = styled.div`
   align-items: center;
   margin-bottom: 10px;
 `;
-const LikeContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px;
-`;
 
 const FunctionUl = styled.ul`
   /* background-color: yellow; */
+  /* width: 100%; */
   display: flex;
-  font-size: 35px;
+  /* justify-content: space-between; */
+  font-size: 25px;
   margin: 20px 15px;
   margin-left: auto;
   list-style: none;
@@ -70,10 +65,10 @@ const TextArea = styled.textarea`
 `;
 
 // 데이터 가져오기
-function ButtonFunc() {
+function MainBtnFunc(props) {
   const [, setPosts] = useState([]);
   const [post, setPost] = useState([]);
-  const { id } = useParams();
+  const id = props.id;
 
   const fetchData = async () => {
     const q = query(collection(db, "posts"));
@@ -87,6 +82,7 @@ function ButtonFunc() {
     const postData = initialPosts.find((item) => item.id === id);
     setPost(postData);
   };
+  console.log(post);
 
   useEffect(() => {
     fetchData();
@@ -141,7 +137,7 @@ function ButtonFunc() {
 
     fetchData(); // 데이터 갱신
   };
-  const likesByUser = post.likesByUser;
+  const likesByUser = post && post.likesByUser;
   //id 별 좋아요 여부 확인
   const isLikedByUser =
     likesByUser && likesByUser.hasOwnProperty(getCurrentUserUid());
@@ -190,10 +186,15 @@ function ButtonFunc() {
   // url 복사
   const copyUrlRef = useRef(null);
 
-  const copyUrl = (e) => {
+  const copyUrl = (postId) => {
     if (!document.queryCommandSupported("copy")) {
       return alert("복사 기능이 지원되지 않는 브라우저입니다.");
     }
+    const currentUrl = window.location.href; // 현재 페이지 URL 가져오기
+    const additionalPath = `detail/${id}`; // 추가할 경로
+
+    const newUrl = currentUrl + additionalPath; // 현재 URL에 추가 경로를 붙임
+    copyUrlRef.current.value = newUrl; // 복사할 URL을 참조하는 input 요소에 새로운 URL 설정
 
     copyUrlRef.current.select();
     document.execCommand("copy");
@@ -236,4 +237,4 @@ function ButtonFunc() {
   );
 }
 
-export default ButtonFunc;
+export default MainBtnFunc;
