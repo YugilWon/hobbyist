@@ -220,20 +220,13 @@ function Profile() {
     setOpen(!open);
   };
 
-  const currentUserId = auth.currentUser.uid;
-  console.log(currentUserId);
-
   return (
     <>
       <ProfileContainer>
         <MyDiv>
           <img src={image} style={{ width: "250px" }} />
         </MyDiv>
-        <ProfileEditBtn
-          currentUserId={currentUserId}
-          params={params}
-          onClick={profileModalHandler}
-        >
+        <ProfileEditBtn params={params} onClick={profileModalHandler}>
           수정
         </ProfileEditBtn>
         <NameContainer>
