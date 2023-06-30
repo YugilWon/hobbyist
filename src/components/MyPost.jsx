@@ -95,6 +95,7 @@ const DeleteBtn = styled.button`
   height: 50px;
   margin-right: 50px;
   margin-left: 20px;
+  cursor: pointer;
 `;
 
 function MyPost() {
@@ -114,7 +115,21 @@ function MyPost() {
       setMyPost(fetchedPosts);
       console.log(fetchedPosts);
     } catch (error) {
-      console.error("Error fetching comments:", error);
+      console.error("Error fetching MyPosts:", error);
+    }
+  };
+
+  const PostDeleteBtn = async (CID) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "posts"), where("CID", "==", CID))
+      );
+      const deletePost = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+
+      await Promise.all(deletePost);
+      fetchMyposts();
+    } catch (error) {
+      console.error("포스트 삭제 오류:", error);
     }
   };
 
@@ -143,7 +158,7 @@ function MyPost() {
               <ContentMent>{post.body}</ContentMent>
             </ContentBody>
             <EditBtn width="40px" height="40px"></EditBtn>
-            <DeleteBtn></DeleteBtn>
+            <DeleteBtn onClick={() => PostDeleteBtn(post.CID)}></DeleteBtn>
           </ListContainer>
         ))}
     </MyContents>
