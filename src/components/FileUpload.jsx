@@ -11,6 +11,12 @@ function FileUpload({ setDownloadURL }) {
 
   const handleUpload = async (e) => {
     e.preventDefault();
+
+    if (!selectedFile) {
+      alert("파일을 선택해주세요.");
+      return;
+    }
+
     const imageRef = ref(
       storage,
       `${auth.currentUser.uid}/${selectedFile.name}`
@@ -21,6 +27,7 @@ function FileUpload({ setDownloadURL }) {
     console.log("downloadURL", downloadURL);
 
     setDownloadURL(downloadURL);
+    return downloadURL;
   };
 
   return (

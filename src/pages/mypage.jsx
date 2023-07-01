@@ -49,12 +49,12 @@ function Mypage() {
   const myPost = useRef(null);
   const bookedPost = useRef(null);
 
+
   return (
     <div>
       <TopBar />
       <MypageLayout>
         <Profile />
-
         <MyContents>
           <MyButton ref={myPost} active={isActive} onClick={handleButtonClick}>
             내가 쓴 글
@@ -68,6 +68,8 @@ function Mypage() {
           </MyButton>
           {(myPost.active = isActive ? <MyPost /> : <BookedPost />)}
         </MyContents>
+//         <MyPost />
+
       </MypageLayout>
     </div>
   );

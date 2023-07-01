@@ -1,16 +1,15 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 import uuid from "react-uuid";
 import TopBar from "../components/TopBar";
 import ButtonFunc from "../components/ButtonFunc";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   collection,
   getDocs,
   query,
   addDoc,
   orderBy,
-  doc,
   updateDoc,
   deleteDoc,
   where,
@@ -19,8 +18,9 @@ import { db } from "../service/firebase";
 import { getAuth } from "firebase/auth";
 
 const Browser = styled.div`
-  aspect-ratio: 1/1;
+  aspect-ratio: 2/1;
   width: 100%;
+  height: 100%;
 `;
 
 const DetailContainer = styled.div`
@@ -28,19 +28,31 @@ const DetailContainer = styled.div`
   background-color: #d9d9d9;
   padding: 30px;
   box-shadow: 0px 1px 5px gray;
+  width: 65%;
+  border-radius: 2%;
+  display: flex;
+  flex-direction: column;
+  margin: 150px 20% 10px 15%;
 `;
 const ContentHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
+`;
+
+const ProfileGroup = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const ProfileImage = styled.img`
   /* background-image: ; */
   background-color: gray;
   border-radius: 70%;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   overflow: hidden;
 `;
 const ProfileName = styled.span`
@@ -49,70 +61,19 @@ const ProfileName = styled.span`
 `;
 
 const ContentImage = styled.div`
-  /* background-color: gray; */
-  height: 600px;
+  background-color: white;
+  height: 500px;
   width: 100%;
   margin-bottom: 10px;
   background-image: ${(props) => `url(${props.backgroundimg})`};
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  border-radius: 20px;
 `;
 
-const ContentFunc = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-const LikeContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-const Likecount = styled.div`
-  font-size: 25px;
-  font-weight: bold;
-  padding-top: 10px;
-`;
-const LikeButton = styled.button`
-  border: 0;
-  background-color: transparent;
-  font-size: 50px;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  transition: opacity 0.3s;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-const BookButton = styled.button`
-  border: 0;
-  background-color: transparent;
-  height: 50px;
-  width: 50px;
-  margin-left: 20px;
-  cursor: pointer;
-  transition: opacity 0.3s;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-const ShareButton = styled.button`
-  border: 0;
-  background-color: transparent;
-  margin-left: auto;
-  height: 50px;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  &:hover {
-    opacity: 0.5;
-  }
-`;
 const ContentTitle = styled.h2``;
+
 const ContentBody = styled.p`
   margin-bottom: 20px;
   height: 150px;
@@ -140,14 +101,6 @@ const CommentLike = styled.button`
   width: 30px;
   height: 30px;
   margin-left: auto;
-`;
-const TextArea = styled.textarea`
-  position: absolute;
-  width: 0px;
-  height: 0px;
-  bottom: 0;
-  right: 0;
-  opacity: 0;
 `;
 
 const CommentInput = styled.input`
@@ -177,29 +130,13 @@ const CommentForm = styled.form`
   top: 0;
 `;
 
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-const Button = styled.button`
-  margin-left: 10px;
-`;
-
 function Detail() {
-  const [, setContents] = useState([]);
-  const [content, setContent] = useState([]);
-
   const [comments, setComments] = useState([]);
   const [editCommentId, setEditCommentId] = useState("");
   const [editedComment, setEditedComment] = useState("");
   const [posts, setPosts] = useState([]);
   const [comment, setComment] = useState("");
   const { id } = useParams();
-  const navigate = useNavigate();
-
-  const [editedTitle, setEditedTitle] = useState("");
-  const [editedBody, setEditedBody] = useState("");
 
   // 랜덤 닉네임 생성 함수
   const generateRandomNickname = () => {
@@ -210,20 +147,10 @@ function Detail() {
       "최고의 ",
       "똑똑한 ",
       "섹시한 ",
-      "슬픈 ",
+      "춤추는 ",
       "기쁜 ",
     ];
-    const nouns = [
-      "말미잘",
-      "코린이",
-      "사자",
-      "외계인",
-      "개발자",
-      "오리",
-      "호날두",
-      "잠자리",
-      "박지성",
-    ];
+    const nouns = ["홍정기", "최원장", "안동훈", "예병수", "류명한"];
     const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
     const noun = nouns[Math.floor(Math.random() * nouns.length)];
     return adjective + noun;
@@ -291,6 +218,7 @@ function Detail() {
   };
   // 포스트 저장 부분 불러옴
   useEffect(() => {
+    console.log("패치일어남");
     fetchPosts();
   }, []);
 
@@ -351,7 +279,7 @@ function Detail() {
       );
 
       querySnapshot.forEach(async (doc) => {
-        await updateDoc(doc.ref, {});
+        await updateDoc(doc.ref, { comment: editedComment });
       });
 
       setEditCommentId("");
@@ -377,44 +305,6 @@ function Detail() {
     }
   };
 
-  //DB에서 해당하는 CID값을 가진 게시글을 삭제하는 함수
-  const PostDeleteBtn = async (CID) => {
-    try {
-      const querySnapshot = await getDocs(
-        query(collection(db, "posts"), where("CID", "==", CID))
-      );
-      const deletePost = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
-
-      await Promise.all(deletePost);
-      alert("피드가 삭제되었습니다!");
-      fetchPosts();
-      navigate(`/`);
-    } catch (error) {
-      console.error("포스트 삭제 오류:", error);
-    }
-  };
-
-  //DB에서 해당하는 CID 값을 가진 게시글을 수정하는 함수
-  const PostEditBtn = async (CID) => {
-    try {
-      const querySnapshot = await getDocs(
-        query(collection(db, "posts"), where("CID", "==", CID))
-      );
-
-      querySnapshot.forEach(async (doc) => {
-        await updateDoc(doc.ref, {
-          title: editedTitle,
-          body: editedBody,
-        });
-      });
-
-      alert("게시글이 수정 되었습니다!");
-      fetchPosts();
-    } catch (error) {
-      console.error("포스트 수정 오류:", error);
-    }
-  };
-
   const filteredPosts = posts.filter((post) => post.id === id);
   const filteredComments = comments.filter((comment) => comment.postId === id);
 
@@ -423,84 +313,83 @@ function Detail() {
       {filteredPosts.map((post) => {
         return (
           <div key={post.id}>
-            <TopBar />
-
-            <DetailContainer>
-              <div>
-                <ButtonGroup>
-                  <Button onClick={() => PostEditBtn(post.CID)}>수정</Button>
-                  <Button onClick={() => PostDeleteBtn(post.CID)}>삭제</Button>
-                </ButtonGroup>
-                <ContentHeader>
-                  <ProfileImage></ProfileImage>
-                  <ProfileName>{post.nickname}</ProfileName>
-                </ContentHeader>
-                <ContentImage backgroundimg={post.downloadURL}></ContentImage>
-                <ButtonFunc />
-                <ContentTitle>{post.title}</ContentTitle>
-                <ContentBody>{post.body}</ContentBody>
-              </div>
-              <CommentContainer>
-                <CommentTitle>댓글</CommentTitle>
-                <CommentBody>
-                  {filteredComments.map((item) => {
-                    return (
-                      <div key={item.CID}>
-                        <p>
-                          <span>
-                            {item.nickname}: {item.comment}
-                            {editCommentId === item.CID ? (
-                              <>
-                                <input
-                                  type="text"
-                                  value={editedComment}
-                                  onChange={(event) => {
-                                    setEditedComment(event.target.value);
-                                  }}
-                                />
-                                <button
-                                  onClick={() => handleCommentEdit(item.CID)}
-                                >
-                                  완료
-                                </button>
-                              </>
-                            ) : (
-                              <>
-                                <button
-                                  onClick={() => setEditCommentId(item.CID)}
-                                >
-                                  수정
-                                </button>
-                                <button
-                                  onClick={() => {
-                                    handleCommentDelete(item.CID);
-                                  }}
-                                >
-                                  삭제
-                                </button>
-                              </>
-                            )}
-                            <CommentLike /> &nbsp; &nbsp;
-                          </span>
-                        </p>
-                      </div>
-                    );
-                  })}
-                </CommentBody>
-                <CommentForm
-                  onSubmit={(event) => {
-                    event.preventDefault();
-                    addComment(post.id, comment);
-                  }}
-                >
-                  <CommentInput
-                    value={comment}
-                    onChange={(event) => setComment(event.target.value)}
-                  />
-                  <CommentButton type="submit">쓰기</CommentButton>
-                </CommentForm>
-              </CommentContainer>
-            </DetailContainer>
+            <Browser>
+              <TopBar />
+              <DetailContainer>
+                <div>
+                  <ContentHeader>
+                    <ProfileGroup>
+                      <ProfileImage src={post.img} alt="" />
+                      <ProfileName>{post.nickname}</ProfileName>
+                    </ProfileGroup>
+                  </ContentHeader>
+                  <ContentImage backgroundimg={post.downloadURL}></ContentImage>
+                  <ButtonFunc />
+                  <ContentTitle>{post.title}</ContentTitle>
+                  <ContentBody>{post.body}</ContentBody>
+                </div>
+                <CommentContainer>
+                  <CommentTitle>댓글</CommentTitle>
+                  <CommentBody>
+                    {filteredComments.map((item) => {
+                      return (
+                        <div key={item.CID}>
+                          <p>
+                            <span>
+                              {item.nickname}: {item.comment}
+                              {editCommentId === item.CID ? (
+                                <>
+                                  <input
+                                    type="text"
+                                    value={editedComment}
+                                    onChange={(event) => {
+                                      setEditedComment(event.target.value);
+                                    }}
+                                  />
+                                  <button
+                                    onClick={() => handleCommentEdit(item.CID)}
+                                  >
+                                    완료
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={() => setEditCommentId(item.CID)}
+                                  >
+                                    수정
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      handleCommentDelete(item.CID);
+                                    }}
+                                  >
+                                    삭제
+                                  </button>
+                                </>
+                              )}
+                              <CommentLike /> &nbsp; &nbsp;
+                            </span>
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </CommentBody>
+                  <CommentForm
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      addComment(post.id, comment);
+                    }}
+                  >
+                    <CommentInput
+                      value={comment}
+                      onChange={(event) => setComment(event.target.value)}
+                    />
+                    <CommentButton type="submit">쓰기</CommentButton>
+                  </CommentForm>
+                </CommentContainer>
+              </DetailContainer>
+            </Browser>
           </div>
         );
       })}
