@@ -58,13 +58,6 @@ const ListContainer = styled.div`
   justify-content: space-between;
 `;
 
-// const ContentImg = styled.div`
-//   background-size: cover;
-//   margin: 20px;
-//   width: 30px;
-//   height: 30px;
-// `;
-
 const ContentBody = styled.div`
   margin-left: 30px;
   height: 90%;
@@ -95,11 +88,11 @@ const DeleteBtn = styled.button`
   margin-left: 20px;
 `;
 
-function MyPost() {
-  const [myPost, setMyPost] = useState([]);
+function BookedPost() {
+  const [bookPost, setBookPost] = useState([]);
   const params = useParams();
 
-  const fetchMyposts = async () => {
+  const fetchBookposts = async () => {
     try {
       const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
       const querySnapshot = await getDocs(q);
@@ -109,7 +102,7 @@ function MyPost() {
         ...doc.data(),
       }));
 
-      setMyPost(fetchedPosts);
+      setBookPost(fetchedPosts);
       console.log(fetchedPosts);
     } catch (error) {
       console.error("Error fetching comments:", error);
@@ -117,13 +110,16 @@ function MyPost() {
   };
 
   useEffect(() => {
-    fetchMyposts();
+    fetchBookposts();
   }, []);
 
   return (
     <MyContents>
-      {myPost
-        .filter((post) => post.uid === params.id)
+      {bookPost
+        .filter(
+          (post) =>
+            post && post.bookedByUsers && params.id in post.bookedByUsers
+        )
         .map((post) => (
           <ListContainer>
             <img
@@ -146,4 +142,4 @@ function MyPost() {
   );
 }
 
-export default MyPost;
+export default BookedPost;
