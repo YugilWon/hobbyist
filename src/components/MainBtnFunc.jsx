@@ -143,9 +143,9 @@ function MainBtnFunc(props) {
   };
   const likesByUser = post && post.likesByUser;
   //id 별 좋아요 여부 확인
-  const isLikedByUser =
-    likesByUser && likesByUser.hasOwnProperty(getCurrentUserUid());
+  const isLikedByUser = likesByUser && likesByUser[getCurrentUserUid()];
 
+  console.log("isLikeByUser", likesByUser);
   // BookedByUsers
   const updateBooked = async () => {
     const postRef = doc(db, "posts", id);
@@ -213,7 +213,7 @@ function MainBtnFunc(props) {
           <IconSpan onClick={updateLikes}>
             {isLikedByUser ? (
               <Icon
-                src="https://cdn-icons-png.flaticon.com/128/210/210545.png"
+                src="https://cdn-icons-png.flaticon.com/128/833/833472.png"
                 alt="좋아요"
               />
             ) : (

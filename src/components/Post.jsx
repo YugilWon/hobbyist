@@ -85,7 +85,7 @@ const generateRandomNickname = () => {
 
 export { generateRandomNickname };
 
-function Post() {
+function Post(props) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -106,11 +106,6 @@ function Post() {
   useEffect(() => {
     fetchData();
   }, []);
-
-  // const posts = useSelector((state) => {
-  //   console.log(state.posts);
-  //   return state.posts;
-  // });
 
   // 글쓰기 모달창 열기
   const postModalHandler = () => {
@@ -136,26 +131,6 @@ function Post() {
       throw error;
     }
   };
-
-  // // DB에서 저장된 포스트를 불러오는 함수
-  // const fetchPosts = async () => {
-  //   try {
-  //     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
-  //     const querySnapshot = await getDocs(q);
-  //     const fetchedPosts = querySnapshot.docs.map((doc) => ({
-  //       id: doc.id,
-  //       ...doc.data(),
-  //     }));
-  //     setPosts(fetchedPosts);
-  //   } catch (error) {
-  //     console.error("Error fetching posts:", error);
-  //   }
-  //   console.log(posts);
-  // };
-  // // 포스트 저장 부분 불러옴
-  // useEffect(() => {
-  //   fetchPosts();
-  // }, []);
 
   // db에 값 저장
   const handlePostSubmit = async (event) => {
@@ -193,7 +168,9 @@ function Post() {
     } catch (error) {
       console.error("Error adding post: ", error);
     }
-    // fetchPosts();
+    props.togglePost();
+    console.log("togglePost 실행");
+    // window.location.reload();
   };
 
   return (

@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TopBar from "../components/TopBar";
 import SideBar from "../components/SideBar";
 import Contents from "../components/Contents";
 import Post from "../components/Post";
 
 function App() {
+  const [showPost, setShowPost] = useState(false);
+
+  const togglePost = () => {
+    setShowPost(!showPost);
+    console.log(showPost);
+  };
+
+  useEffect(() => {
+    <Contents />;
+  }, [showPost]);
+
   return (
     <>
       <div
@@ -17,7 +28,7 @@ function App() {
           <TopBar />
           <SideBar />
           <Contents />
-          <Post />
+          <Post togglePost={togglePost} />
         </div>
       </div>
     </>
