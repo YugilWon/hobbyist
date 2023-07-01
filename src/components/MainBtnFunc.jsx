@@ -50,6 +50,11 @@ const IconSpan = styled.span`
   }
 `;
 
+const Icon = styled.img`
+  width: 35px;
+  height: 35px;
+`;
+
 const Likecount = styled.span`
   font-weight: bold;
   padding-top: 10px;
@@ -82,7 +87,6 @@ function MainBtnFunc(props) {
     const postData = initialPosts.find((item) => item.id === id);
     setPost(postData);
   };
-  console.log(post);
 
   useEffect(() => {
     fetchData();
@@ -208,9 +212,15 @@ function MainBtnFunc(props) {
         <FunctionLi>
           <IconSpan onClick={updateLikes}>
             {isLikedByUser ? (
-              <FontAwesomeIcon icon={faHeart} />
+              <Icon
+                src="https://cdn-icons-png.flaticon.com/128/210/210545.png"
+                alt="좋아요"
+              />
             ) : (
-              <FontAwesomeIcon icon={faHeart} />
+              <Icon
+                src="https://cdn-icons-png.flaticon.com/128/1077/1077035.png"
+                alt="좋아요"
+              />
             )}
           </IconSpan>
           <Likecount>{post.likeCount}</Likecount>
@@ -218,16 +228,25 @@ function MainBtnFunc(props) {
         <FunctionLi>
           <IconSpan onClick={updateBooked}>
             {isBookedByUser ? (
-              <FontAwesomeIcon icon={faBookmark} />
+              <Icon
+                src="https://cdn-icons-png.flaticon.com/128/709/709631.png"
+                alt="북마크"
+              />
             ) : (
-              <FontAwesomeIcon icon={faBookmark} />
+              <Icon
+                src="https://cdn-icons-png.flaticon.com/128/5662/5662990.png"
+                alt="북마크"
+              />
             )}
           </IconSpan>
           {/* 북마크 */}
         </FunctionLi>
         <FunctionLi>
           <IconSpan onClick={copyUrl} value={post.id}>
-            <FontAwesomeIcon icon={faShareFromSquare} />
+            <Icon
+              src="https://cdn-icons-png.flaticon.com/128/2550/2550207.png"
+              alt="공유하기"
+            />
           </IconSpan>
           {/* 공유하기 */}
         </FunctionLi>

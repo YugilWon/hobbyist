@@ -1,7 +1,14 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import { collection, getDocs, addDoc, where, query } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  addDoc,
+  where,
+  query,
+  orderBy,
+} from "firebase/firestore";
 import FileUpload from "./FileUpload";
 import { db } from "../service/firebase";
 import uuid from "react-uuid";
@@ -83,6 +90,7 @@ function Post() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [downloadURL, setDownloadURL] = useState(null);
+  const [posts, setPosts] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -129,6 +137,26 @@ function Post() {
     }
   };
 
+  // // DB에서 저장된 포스트를 불러오는 함수
+  // const fetchPosts = async () => {
+  //   try {
+  //     const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+  //     const querySnapshot = await getDocs(q);
+  //     const fetchedPosts = querySnapshot.docs.map((doc) => ({
+  //       id: doc.id,
+  //       ...doc.data(),
+  //     }));
+  //     setPosts(fetchedPosts);
+  //   } catch (error) {
+  //     console.error("Error fetching posts:", error);
+  //   }
+  //   console.log(posts);
+  // };
+  // // 포스트 저장 부분 불러옴
+  // useEffect(() => {
+  //   fetchPosts();
+  // }, []);
+
   // db에 값 저장
   const handlePostSubmit = async (event) => {
     event.preventDefault();
@@ -165,6 +193,7 @@ function Post() {
     } catch (error) {
       console.error("Error adding post: ", error);
     }
+    // fetchPosts();
   };
 
   return (
