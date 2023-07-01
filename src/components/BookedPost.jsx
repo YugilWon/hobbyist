@@ -143,3 +143,6 @@ function BookedPost() {
 }
 
 export default BookedPost;
+
+// 이 부분은 지워주세요.
+// testtesttest
