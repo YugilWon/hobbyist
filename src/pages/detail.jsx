@@ -202,6 +202,21 @@ function Detail() {
     }
   };
 
+  //img 가져오는 함수
+  const getImg = async (uid) => {
+    console.log(uid);
+    try {
+      const q = query(collection(db, "users"), where("uid", "==", uid));
+      const querySnapshot = await getDocs(q);
+
+      const userData = querySnapshot.docs[0].data();
+      return userData.img;
+    } catch (error) {
+      console.error("Error getting nickImg:", error);
+      throw error;
+    }
+  };
+
   // DB에서 저장된 포스트를 불러오는 함수
   const fetchPosts = async () => {
     try {
@@ -319,7 +334,7 @@ function Detail() {
                 <div>
                   <ContentHeader>
                     <ProfileGroup>
-                      <ProfileImage></ProfileImage>
+                      <ProfileImage src={post.img}></ProfileImage>
                       <ProfileName>{post.nickname}</ProfileName>
                     </ProfileGroup>
                   </ContentHeader>
