@@ -60,15 +60,55 @@ const IconSpan = styled.span`
   cursor: pointer;
 `;
 
+// const CommentForm = styled.form`
+//   position: relative;
+//   right: 0;
+//   top: 0;
+// `;
+// const CommentInput = styled.input`
+//   width: 100%;
+//   padding: 9px 8px;
+//   border-radius: 5px;
+//   border: none;
+//   outline: none;
+//   box-sizing: border-box;
+//   background: #eee;
+// `;
+// const CommentButton = styled.button`
+//   position: absolute;
+//   right: 0;
+//   top: 0;
+//   padding: 8px 14px;
+//   border: none;
+//   border-radius: 0px 5px 5px 0px;
+//   background: #222;
+//   color: #fff;
+// `;
+
 function Contents() {
-  const [likeCount] = useState(false);
-  const [, setComments] = useState([]);
+  const [comment, setComment] = useState();
+  const [user, setUser] = useState({ nickname: "익명", email: "" });
+  const [likeCount, setLikeCount] = useState(false);
+  const [comments, setComments] = useState([]);
+  const [editCommentId, setEditCommentId] = useState("");
+  const [editedComment, setEditedComment] = useState("");
   const [posts, setPosts] = useState([]);
-  const [, setUsers] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // 로그아웃 시 호출되는 함수
+  const handleLogout = () => {
+    setUser(null);
+  };
+
+  // DB에서 저장된 값 불러오는 부분과 재렌더링
+  const fetchComments = async () => {
+
+
+  
 
   //db에서 유저 데이터 불러오는 함수
   const fetchUsers = async () => {
+
     try {
       const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
       const querySnapshot = await getDocs(q);
@@ -127,17 +167,74 @@ function Contents() {
     fetchPosts();
   }, []);
 
+
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
 
-  // url 복사
-  const copyUrlRef = useRef(null);
 
-  const copyUrl = (e) => {
-    if (!document.queryCommandSupported("copy")) {
-      return alert("복사 기능이 지원되지 않는 브라우저입니다.");
+  //입력시 DB에 저장하는 함수
+  const handleCommentSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!user) {
+      alert("로그인 한 사용자만 댓글을 남길 수 있습니다!");
+      return;
     }
+
+    const { nickname, email } = user;
+
+    const newComment = {
+      CID: uuid(),
+      comment: comment,
+      createdAt: new Date(),
+      nickname: nickname,
+      email: email,
+    };
+
+    try {
+      const docRef = await addDoc(collection(db, "Comments"), newComment);
+      console.log("Comment added with ID: ", docRef.id);
+      setComment("");
+      fetchComments();
+    } catch (error) {
+      console.error("Error adding comment: ", error);
+    }
+  };
+
+  //DB에서 해당하는 CID값을 가진 댓글을 수정하는 함수
+  const handleCommentEdit = async (CID) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "Comments"), where("CID", "==", CID))
+      );
+
+      querySnapshot.forEach(async (doc) => {
+        await updateDoc(doc.ref, {
+          comment: editedComment,
+        });
+      });
+
+      setEditCommentId("");
+      setEditedComment("");
+      fetchComments();
+    } catch (error) {
+      console.error("댓글 수정 오류:", error);
+    }
+  };
+
+  //DB에서 해당하는 CID값을 가진 댓글을 삭제하는 함수
+  const handleCommentDelete = async (CID) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "Comments"), where("CID", "==", CID))
+      );
+      const deletecomment = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+
+      await Promise.all(deletecomment);
+      fetchComments();
+    } catch (error) {
+      console.error("댓글 삭제 오류:", error);
 
     const currentUrl = window.location.href; // 현재 페이지 URL 가져오기
     const additionalPath = `detail/${e.target.value}`; // 추가할 경로
@@ -185,12 +282,33 @@ function Contents() {
                     style={{
                       width: "100%",
                     }}
+
+                  >
+                    <span style={{ marginLeft: "8px" }}>{item.nickname} </span>
+                    <span />
+                    <span />
+                    {item.comment}
+
+                    <button onClick={() => setEditCommentId(item.CID)}>
+                      수정
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleCommentDelete(item.CID);
+                      }}
+                    >
+                      삭제
+                    </button>
+                  </p>
+                )}
+              </div>
+            );
+          })}
                     src={post.downloadURL}
                     alt=""
                   />
                   <span>{post.body}</span>
                 </ContentsBox>
-
                 <FunctionUl>
                   <li>
                     <IconSpan>

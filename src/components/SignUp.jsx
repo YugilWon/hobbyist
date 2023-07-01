@@ -29,7 +29,7 @@ function SignUp() {
   const [verifypassword, setVerifyPassword] = useState("");
   const [nickname, setNickName] = useState("");
   const [join, setJoin] = useState("회원가입");
-  const [passwordverify, setPasswordVerify] = useState(true);
+
 
   const auth = getAuth();
   const navigate = useNavigate();
@@ -97,8 +97,12 @@ function SignUp() {
         uid: uid,
         email: email,
         nickname: nickname,
+
+        // 다른 회원 정보 필드들을 추가할 수 있습니다
+
         memo: "자기소개를 입력해주세요.",
         img: "사진파일이름",
+
       });
 
       console.log("가입에 성공했습니다", userCredential);
@@ -204,7 +208,6 @@ function SignUp() {
                   placeholder="비밀번호 확인"
                 />
               </p>
-
               <p>
                 <Input
                   className="Nickname-Input"
