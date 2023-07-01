@@ -11,12 +11,6 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBookmark,
-  faHeart,
-  faShareFromSquare,
-} from "@fortawesome/free-regular-svg-icons";
 
 const ContentFunc = styled.div`
   display: flex;
@@ -141,8 +135,7 @@ function ButtonFunc() {
   };
   const likesByUser = post.likesByUser;
   //id 별 좋아요 여부 확인
-  const isLikedByUser =
-    likesByUser && likesByUser.hasOwnProperty(getCurrentUserUid());
+  const isLikedByUser = likesByUser && likesByUser[getCurrentUserUid()];
 
   // BookedByUsers
   const updateBooked = async () => {

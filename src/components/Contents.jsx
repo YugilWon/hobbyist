@@ -58,7 +58,6 @@ function Contents() {
         ...doc.data(),
       }));
       setUsers(fetchedUsers);
-      console.log(fetchedUsers);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }
@@ -96,7 +95,6 @@ function Contents() {
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
-    console.log(posts);
   };
   // 포스트 저장 부분 불러옴
   useEffect(() => {

@@ -1,14 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
-import {
-  collection,
-  getDocs,
-  addDoc,
-  where,
-  query,
-  orderBy,
-} from "firebase/firestore";
+import { collection, getDocs, addDoc, where, query } from "firebase/firestore";
 import FileUpload from "./FileUpload";
 import { db } from "../service/firebase";
 import uuid from "react-uuid";
@@ -85,12 +78,11 @@ const generateRandomNickname = () => {
 
 export { generateRandomNickname };
 
-function Post(props) {
+function Post() {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [downloadURL, setDownloadURL] = useState(null);
-  const [posts, setPosts] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -168,9 +160,6 @@ function Post(props) {
     } catch (error) {
       console.error("Error adding post: ", error);
     }
-    props.togglePost();
-    console.log("togglePost 실행");
-    // window.location.reload();
   };
 
   return (
