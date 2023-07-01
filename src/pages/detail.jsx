@@ -1,121 +1,88 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
+import uuid from "react-uuid";
 import TopBar from "../components/TopBar";
-import { collection, getDocs, query, updateDoc, doc } from "firebase/firestore";
+import ButtonFunc from "../components/ButtonFunc";
+import { useParams, useNavigate } from "react-router-dom";
+import {
+  collection,
+  getDocs,
+  query,
+  addDoc,
+  orderBy,
+  updateDoc,
+  deleteDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "../service/firebase";
+import { getAuth } from "firebase/auth";
+
+const Browser = styled.div`
+  aspect-ratio: 2/1;
+  width: 100%;
+  height: 100%;
+`;
+
 const DetailContainer = styled.div`
   margin-top: 100px;
   background-color: #d9d9d9;
   padding: 30px;
   box-shadow: 0px 1px 5px gray;
+  width: 65%;
+  border-radius: 2%;
+  display: flex;
+  flex-direction: column;
+  margin: 150px 20% 10px 15%;
 `;
 const ContentHeader = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   margin-bottom: 20px;
+`;
+
+const ProfileGroup = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 const ProfileImage = styled.img`
   /* background-image: ; */
   background-color: gray;
   border-radius: 70%;
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   overflow: hidden;
 `;
 const ProfileName = styled.span`
   font-size: 30px;
   margin-left: 20px;
 `;
+
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Button = styled.button`
+  margin-left: 10px;
+`;
+
 const ContentImage = styled.div`
-  /* background-color: gray; */
-  height: 600px;
+  background-color: white;
+  height: 500px;
   width: 100%;
   margin-bottom: 10px;
-  background-image: url("https://cdn.pixabay.com/photo/2015/09/02/12/30/hiker-918473_640.jpg");
-  background-size: cover;
+  background-image: ${(props) => `url(${props.backgroundimg})`};
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
-`;
-const ContentFunc = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px;
-`;
-const LikeContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 10px;
+  border-radius: 20px;
 `;
 
-const Likecount = styled.div`
-  font-size: 25px;
-  font-weight: bold;
-  padding-top: 10px;
-`;
+const ContentTitle = styled.h2``;
 
-const LikeButton = styled.button`
-  border: 0;
-  background-color: transparent;
-  ${(props) =>
-    props.islike
-      ? `
-      background-image: url("https://img.icons8.com/?size=1x&id=16424&format=png");
-    `
-      : `
-      background-image: url("https://img.icons8.com/?size=1x&id=581&format=png");
-    `};
-  /* background-image: url("https://img.icons8.com/?size=1x&id=581&format=png"); */
-  /* background-image: url("https://img.icons8.com/?size=1x&id=16424&format=png"); */
-  font-size: 50px;
-  width: 50px;
-  height: 50px;
-  cursor: pointer;
-  transition: opacity 0.3s;
-
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-const BookButton = styled.button`
-  border: 0;
-  background-color: transparent;
-  ${(props) =>
-    props.isbooked
-      ? `
-      background-image: url("https://img.icons8.com/?size=1x&id=26083&format=png");
-    `
-      : `
-    background-image: url("https://img.icons8.com/?size=1x&id=25157&format=png");
-    `};
-  /* background-image: url("https://img.icons8.com/?size=1x&id=25157&format=png"); */
-  /* background-image: url("https://img.icons8.com/?size=1x&id=26083&format=png"); */
-  height: 50px;
-  width: 50px;
-  margin-left: 20px;
-  cursor: pointer;
-  transition: opacity 0.3s;
-
-  &:hover {
-    opacity: 0.5;
-  }
-`;
-const ShareButton = styled.button`
-  border: 0;
-  background-color: transparent;
-  margin-left: auto;
-  height: 50px;
-  font-size: 20px;
-  font-weight: bold;
-
-  cursor: pointer;
-
-  &:hover {
-    opacity: 0.5;
-  }
-`;
 const ContentBody = styled.p`
   margin-bottom: 20px;
   height: 150px;
@@ -130,15 +97,14 @@ const CommentBody = styled.div`
   padding: 10px;
   font-size: 20px;
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: left;
 `;
 const CommentContainer = styled.div``;
 const CommentLike = styled.button`
   border: 0;
   background-color: transparent;
   background-image: url("https://img.icons8.com/?size=1x&id=581&format=png");
-  /* https://img.icons8.com/?size=1x&id=16424&format=png */
   background-size: cover;
   font-size: 30px;
   width: 30px;
@@ -146,133 +112,362 @@ const CommentLike = styled.button`
   margin-left: auto;
 `;
 
-const TextArea = styled.textarea`
+const CommentInput = styled.input`
+  width: 100%;
+  padding: 9px 8px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  box-sizing: border-box;
+  background: #eee;
+`;
+
+const CommentButton = styled.button`
   position: absolute;
-  width: 0px;
-  height: 0px;
-  bottom: 0;
   right: 0;
-  opacity: 0;
+  top: 0;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 0px 5px 5px 0px;
+  background: #222;
+  color: #fff;
+`;
+
+const CommentForm = styled.form`
+  position: relative;
+  right: 0;
+  top: 0;
 `;
 
 function Detail() {
-  const [, setContents] = useState([]);
-  const [content, setContent] = useState([]);
+  const [comments, setComments] = useState([]);
+  const [editCommentId, setEditCommentId] = useState("");
+  const [editedComment, setEditedComment] = useState("");
+  const [posts, setPosts] = useState([]);
+  const [comment, setComment] = useState("");
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-  // 데이터 가져오기
-  useEffect(() => {
-    const fetchData = async () => {
-      const q = query(collection(db, "contents"));
+  const [editedTitle] = useState("");
+  const [editedBody] = useState("");
+
+  // 랜덤 닉네임 생성 함수
+  const generateRandomNickname = () => {
+    const adjectives = [
+      "행복한 ",
+      "용감한 ",
+      "사나운 ",
+      "최고의 ",
+      "똑똑한 ",
+      "섹시한 ",
+      "슬픈 ",
+      "기쁜 ",
+    ];
+    const nouns = [
+      "말미잘",
+      "코린이",
+      "사자",
+      "외계인",
+      "개발자",
+      "오리",
+      "호날두",
+      "잠자리",
+      "박지성",
+    ];
+    const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const noun = nouns[Math.floor(Math.random() * nouns.length)];
+    return adjective + noun;
+  };
+
+  // 현재 로그인 된 아이디 알아오는 함수
+  const getCurrentUserUid = () => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    console.log("현재 로그인 된 아이디", currentUser);
+    if (currentUser) {
+      return currentUser.uid;
+    } else {
+      console.log("로그인된 사용자가 없습니다!");
+      return null;
+    }
+  };
+
+  // 현재 로그인 된 이메일 알아오는 함수
+  const getCurrentUserEmail = () => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    console.log("현재 로그인 된 이메일", currentUser);
+    if (currentUser) {
+      return currentUser.email;
+    } else {
+      console.log("로그인된 사용자가 없습니다!");
+      return null;
+    }
+  };
+
+  // 닉네임 불러오는 함수
+  const getNickname = async (uid, email) => {
+    console.log(uid);
+    try {
+      const q = query(collection(db, "users"), where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
-      const initialContents = [];
-      querySnapshot.forEach((doc) => {
-        initialContents.push({ id: doc.id, ...doc.data() });
-      });
-      setContents(initialContents);
 
-      const contentData = initialContents.find((item) => item.id === "content");
-      setContent(contentData);
-    };
-    fetchData();
+      if (!querySnapshot.empty) {
+        const userData = querySnapshot.docs[0].data();
+        return userData.nickname || email;
+      } else {
+        const randomNickname = generateRandomNickname();
+        return randomNickname;
+      }
+    } catch (error) {
+      console.error("Error getting nickname:", error);
+      throw error;
+    }
+  };
+
+  // DB에서 저장된 포스트를 불러오는 함수
+  const fetchPosts = async () => {
+    try {
+      const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
+      const fetchedPosts = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setPosts(fetchedPosts);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+  // 포스트 저장 부분 불러옴
+  useEffect(() => {
+    fetchPosts();
   }, []);
 
-  // Like update
-  const updateLike = async (event) => {
-    const contentRef = doc(db, "contents", "content");
+  // DB에서 저장된 코멘트 불러오는 부분과 재렌더링
+  const fetchComments = async () => {
+    try {
+      const q = query(collection(db, "Comments"), orderBy("createdAt", "desc"));
+      const querySnapshot = await getDocs(q);
 
-    if (content.isLike) {
-      // 이미 좋아요가 눌린 상태인 경우, 좋아요 취소 처리
-      await updateDoc(contentRef, {
-        isLike: false,
-        likeCount: content.likeCount - 1,
-      });
-      setContent((prevContent) => ({
-        ...prevContent,
-        isLike: !prevContent.isLike,
-        likeCount: prevContent.likeCount - 1,
+      const fetchedComments = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
       }));
-    } else {
-      // 좋아요가 눌리지 않은 상태인 경우, 좋아요 처리
-      await updateDoc(contentRef, {
-        isLike: true,
-        likeCount: content.likeCount + 1,
-      });
-      setContent((prevContent) => ({
-        ...prevContent,
-        isLike: !prevContent.isLike,
-        likeCount: prevContent.likeCount + 1,
-      }));
+
+      setComments(fetchedComments);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
     }
   };
 
-  // 북마크 update
-  const updateBooked = async (event) => {
-    const contentRef = doc(db, "contents", "content");
-    await updateDoc(contentRef, { isBooked: !content.isBooked });
-    setContent((prevContent) => ({
-      ...prevContent,
-      isBooked: !prevContent.isBooked,
-    }));
-  };
+  useEffect(() => {
+    fetchComments();
+  }, []);
 
-  // url 복사
-  const copyUrlRef = useRef(null);
+  // 댓글 추가 함수
+  const addComment = async (postId, comment) => {
+    try {
+      const uid = getCurrentUserUid();
+      const email = getCurrentUserEmail();
+      if (!uid) {
+        console.error("User UID not found");
+        return;
+      }
 
-  const copyUrl = (e) => {
-    if (!document.queryCommandSupported("copy")) {
-      return alert("복사 기능이 지원되지 않는 브라우저입니다.");
+      const fetchedNickname = await getNickname(uid, email);
+
+      const newComment = {
+        CID: uuid(),
+        comment: comment,
+        createdAt: new Date(),
+        nickname: fetchedNickname,
+        postId: postId,
+      };
+
+      await addDoc(collection(db, "Comments"), newComment);
+      setComment(""); // 댓글 작성 후 입력 필드 비우기
+      fetchComments(); // 댓글 목록 다시 불러오기
+    } catch (error) {
+      console.error("Error adding comment: ", error);
     }
-
-    copyUrlRef.current.select();
-    document.execCommand("copy");
-    e.target.focus();
-
-    alert("링크가 복사되었습니다.");
   };
+
+  //DB에서 해당하는 CID값을 가진 댓글을 수정하는 함수
+  const handleCommentEdit = async (CID) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "Comments"), where("CID", "==", CID))
+      );
+
+      querySnapshot.forEach(async (doc) => {
+        await updateDoc(doc.ref, {});
+      });
+
+      setEditCommentId("");
+      setEditedComment("");
+      fetchComments();
+    } catch (error) {
+      console.error("댓글 수정 오류:", error);
+    }
+  };
+
+  //DB에서 해당하는 CID값을 가진 댓글을 삭제하는 함수
+  const handleCommentDelete = async (CID) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "Comments"), where("CID", "==", CID))
+      );
+      const deletecomment = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+
+      await Promise.all(deletecomment);
+      fetchComments();
+    } catch (error) {
+      console.error("댓글 삭제 오류:", error);
+    }
+  };
+
+  //DB에서 해당하는 CID값을 가진 게시글을 삭제하는 함수
+  const PostDeleteBtn = async (CID) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "posts"), where("CID", "==", CID))
+      );
+      const deletePost = querySnapshot.docs.map((doc) => deleteDoc(doc.ref));
+
+      await Promise.all(deletePost);
+      alert("피드가 삭제되었습니다!");
+      fetchPosts();
+      navigate(`/`);
+    } catch (error) {
+      console.error("포스트 삭제 오류:", error);
+    }
+  };
+
+  //DB에서 해당하는 CID 값을 가진 게시글을 수정하는 함수
+  const PostEditBtn = async (CID) => {
+    try {
+      const querySnapshot = await getDocs(
+        query(collection(db, "posts"), where("CID", "==", CID))
+      );
+
+      querySnapshot.forEach(async (doc) => {
+        await updateDoc(doc.ref, {
+          title: editedTitle,
+          body: editedBody,
+        });
+      });
+
+      alert("게시글이 수정 되었습니다!");
+      fetchPosts();
+    } catch (error) {
+      console.error("포스트 수정 오류:", error);
+    }
+  };
+
+  const filteredPosts = posts.filter((post) => post.id === id);
+  const filteredComments = comments.filter((comment) => comment.postId === id);
 
   return (
     <>
-      <TopBar />
-      <DetailContainer>
-        <div>
-          <ContentHeader>
-            <ProfileImage></ProfileImage>
-            <ProfileName>User</ProfileName>
-          </ContentHeader>
-          <ContentImage></ContentImage>
-          <ContentFunc>
-            <LikeContainer>
-              <LikeButton
-                onClick={updateLike}
-                islike={content.isLike}
-              ></LikeButton>
-              <Likecount>{content.likeCount}</Likecount>
-            </LikeContainer>
-            <BookButton
-              onClick={updateBooked}
-              isbooked={content.isBooked}
-            ></BookButton>
-            <TextArea ref={copyUrlRef} value={window.location.href}></TextArea>
-            <ShareButton onClick={copyUrl}>공유하기</ShareButton>
-          </ContentFunc>
-          <ContentBody>나 여기 다녀왔어!</ContentBody>
-        </div>
-        <CommentContainer>
-          <CommentTitle>댓글</CommentTitle>
-          <CommentBody>
-            <span>아이디</span>
-            <p>댓글</p>
-            <CommentLike></CommentLike>
-          </CommentBody>
-        </CommentContainer>
-      </DetailContainer>
+      {filteredPosts.map((post) => {
+        return (
+          <div key={post.id}>
+            <Browser>
+              <TopBar />
+
+              <DetailContainer>
+                <div>
+                  <ContentHeader>
+                    <ProfileGroup>
+                      <ProfileImage></ProfileImage>
+                      <ProfileName>{post.nickname}</ProfileName>
+                    </ProfileGroup>
+                    <ButtonGroup>
+                      <Button onClick={() => PostEditBtn(post.CID)}>
+                        수정
+                      </Button>
+                      <Button onClick={() => PostDeleteBtn(post.CID)}>
+                        삭제
+                      </Button>
+                    </ButtonGroup>
+                  </ContentHeader>
+                  <ContentImage backgroundimg={post.downloadURL}></ContentImage>
+                  <ButtonFunc />
+                  <ContentTitle>{post.title}</ContentTitle>
+                  <ContentBody>{post.body}</ContentBody>
+                </div>
+                <CommentContainer>
+                  <CommentTitle>댓글</CommentTitle>
+                  <CommentBody>
+                    {filteredComments.map((item) => {
+                      return (
+                        <div key={item.CID}>
+                          <p>
+                            <span>
+                              {item.nickname}: {item.comment}
+                              {editCommentId === item.CID ? (
+                                <>
+                                  <input
+                                    type="text"
+                                    value={editedComment}
+                                    onChange={(event) => {
+                                      setEditedComment(event.target.value);
+                                    }}
+                                  />
+                                  <button
+                                    onClick={() => handleCommentEdit(item.CID)}
+                                  >
+                                    완료
+                                  </button>
+                                </>
+                              ) : (
+                                <>
+                                  <button
+                                    onClick={() => setEditCommentId(item.CID)}
+                                  >
+                                    수정
+                                  </button>
+                                  <button
+                                    onClick={() => {
+                                      handleCommentDelete(item.CID);
+                                    }}
+                                  >
+                                    삭제
+                                  </button>
+                                </>
+                              )}
+                              <CommentLike /> &nbsp; &nbsp;
+                            </span>
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </CommentBody>
+                  <CommentForm
+                    onSubmit={(event) => {
+                      event.preventDefault();
+                      addComment(post.id, comment);
+                    }}
+                  >
+                    <CommentInput
+                      value={comment}
+                      onChange={(event) => setComment(event.target.value)}
+                    />
+                    <CommentButton type="submit">쓰기</CommentButton>
+                  </CommentForm>
+                </CommentContainer>
+              </DetailContainer>
+            </Browser>
+          </div>
+        );
+      })}
     </>
   );
 }
-// 좋아요 버튼
-// isActive ? 채워진 하트 : 빈하트
-// 좋아요 수
-// 데이터 불러오기 > count+1 > 데이터 베이스 > 데이터 불러오기
-// 북마크
-// isBooked ? 채워진 북마크 : 빈 북마크
 export default Detail;
+
+//사진크기조절
+// 백그라운드 커버말고 다른거? 모지란거 검은배경 비율지키기!
+
+//사이드바 카테고리
