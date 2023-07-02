@@ -43,7 +43,6 @@ function SignUp() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      console.log("user", user);
       return !auth.currentUser ? setJoin("회원가입") : setJoin("마이페이지");
     });
   }, [auth]);
@@ -123,8 +122,6 @@ function SignUp() {
         memo: "자기소개를 입력해주세요.",
         img: "https://ca.slack-edge.com/T043597JK8V-U057B2LN1NU-f07fd31753d9-512",
       });
-
-      console.log("가입에 성공했습니다", userCredential);
 
       setIsModalOpen2(false);
       setEmail("");

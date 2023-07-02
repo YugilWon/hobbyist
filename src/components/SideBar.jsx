@@ -132,7 +132,6 @@ function SideBar() {
 
   const handleSubcategory = (subcategory) => {
     const cleanSubcategory = subcategory.substring(2).trim();
-    console.log(cleanSubcategory);
     dispatch(addCategory(cleanSubcategory));
   };
 

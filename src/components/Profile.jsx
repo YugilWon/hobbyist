@@ -180,7 +180,6 @@ function Profile() {
 
   // 현재 유저 아이디 가져옴
   const params = useParams().id;
-  console.log(params);
 
   // DB에서 저장된 값 불러오는 부분과 재렌더링
   const fetchUsers = useCallback(async () => {
@@ -202,7 +201,6 @@ function Profile() {
         setUsers(thisUser.nickname);
         setMemo(thisUser.memo);
         setImage(thisUser.img);
-        console.log(thisUser.memo);
       }
     } catch (error) {
       console.error("Error fetching comments:", error);
@@ -232,7 +230,6 @@ function Profile() {
     await uploadBytes(imageRef, selectedFile);
 
     const downloadURL = await getDownloadURL(imageRef);
-    console.log("downloadURL", downloadURL);
 
     setDownloadURL(downloadURL);
 
@@ -317,8 +314,6 @@ function Profile() {
       setEditedName(thisUser.nickname);
       setEditedMemo(thisUser.memo);
     }
-
-    console.log("수정폼 유저데이터", thisUser);
 
     await fetchUsers();
   };

@@ -52,14 +52,6 @@ const BtnContainer = styled.div`
 
 function TopBar({ onSearch }) {
   const navigate = useNavigate();
-  // const [searchQuery, setSearchQuery] = useState("");
-
-  // const handleSearch = (e) => {
-  //   console.log("제출이 일어남", searchQuery);
-  //   e.preventDefault();
-  //   onSearch(searchQuery);
-  // };
-
   return (
     <>
       <Header>

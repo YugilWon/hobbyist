@@ -15,7 +15,7 @@ const Form = styled.form`
   border: none;
   width: 98%;
   border-radius: 25px;
-  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
   padding: 3px 10px;
   align-items: center;
   justify-content: space-between;
@@ -38,6 +38,7 @@ const MainInner = styled.div`
   margin-bottom: 20px;
   border-radius: 14px;
   background: #fff;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 `;
 const MainUser = styled.div`
   display: flex;
@@ -130,7 +131,6 @@ function Contents() {
       );
     }
     if (clicksubcategory) {
-      console.log(clicksubcategory);
       filteredPosts = filteredPosts.filter(
         (post) => post.subcategory === clicksubcategory
       );
