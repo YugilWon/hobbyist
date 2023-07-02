@@ -1,6 +1,5 @@
 import React from "react";
 import TopBar from "../components/TopBar";
-import SideBar2 from "../components/SideBar2";
 import Contents from "../components/Contents";
 
 function App() {
@@ -14,7 +13,6 @@ function App() {
       >
         <div style={{ display: "flex" }}>
           <TopBar />
-          <SideBar2 />
           <Contents />
         </div>
       </div>
