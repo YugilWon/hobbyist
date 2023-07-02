@@ -4,14 +4,13 @@ import { styled } from "styled-components";
 const StDiv = styled.div`
   margin-top: 40px;
   background-image: linear-gradient(315deg, #5c44e0 0%, #88d3ce 74%);
-  /* background-color: white; */
   color: white;
   height: 100px;
   width: 190px;
   border-radius: 10px;
   padding: 15px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  position: fixed;
+  position: relative;
 `;
 
 function Weather() {
