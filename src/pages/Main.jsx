@@ -5,15 +5,25 @@ import Contents from "../components/Contents";
 function App() {
   return (
     <>
-      <div
-        style={{
-          maxWidth: "1200px",
-          margin: "0 auto",
-        }}
-      >
-        <div style={{ display: "flex" }}>
-          <TopBar />
-          <Contents />
+          <div>
+    <TopBar />
+
+        <div style={{
+          display :"flex",
+          justifyContent :"center",
+          gap : "60px",
+          marginTop : "50px"
+        }}>
+          <div style={{
+            position : "relative",
+            left : "0px",
+            top : "0px"
+          }}>
+          <SideBar2 /> 
+          </div>
+          <Contents /> 
+          {/* <Post /> */}
+
         </div>
       </div>
     </>

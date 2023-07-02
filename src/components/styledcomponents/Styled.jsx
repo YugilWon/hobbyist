@@ -31,6 +31,7 @@ export const Button = styled.button`
 `;
 
 export const TopButton = styled.button`
+
   font-size: 15px;
   width: 130px;
   height: 35px;
@@ -38,10 +39,6 @@ export const TopButton = styled.button`
   border-radius: 10px;
   background-color: transparent;
   cursor: pointer;
-  &:hover {
-    color: #5e5ee8;
-    background-color: #e3e3f0;
-  }
 `;
 
 export const ModalContainer = styled.div`

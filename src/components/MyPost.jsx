@@ -46,10 +46,11 @@ const StH1 = styled.h1`
 `;
 
 const ListContainer = styled.div`
-  background-color: #efefea;
+  background-color: #fff;
+  border-radius: 7px;
+  margin-bottom: 5px;
   height: 20%;
   padding: 10px;
-  border: 0.5px solid #f5f5f5;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -61,16 +62,16 @@ const ContentBody = styled.div`
   width: 30%;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
 `;
 const ContentTitle = styled.div`
-  font-size: 30px;
+  font-size: 20px;
   font-weight: bold;
+  margin-bottom : 10px;
   cursor: pointer;
 `;
 const ContentMent = styled.p`
-  font-size: 20px;
+  font-size: 14px;
 `;
 const DeleteBtn = styled.button`
   background-image: url("https://img.icons8.com/?size=1x&id=102315&format=png");
@@ -356,8 +357,8 @@ function MyPost() {
             <ListContainer key={post.CID}>
               <img
                 style={{
-                  width: "300px",
-                  height: "100px",
+                  width: "240px",
+                  height: "80px",
                 }}
                 src={post.downloadURL ? post.downloadURL : null}
                 alt=""

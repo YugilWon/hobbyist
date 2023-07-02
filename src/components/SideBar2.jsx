@@ -5,54 +5,49 @@ import { subcategoryOptions } from "./MyPost";
 import Weather from "./Weather";
 import Post from "./Post";
 
+const SidebarWrap = styled.div`
+    position: sticky; left: 0; top: 100px;
+`
 const AllList = styled.button`
-  margin-top: 200px;
-  /* height: 540px; */
   width: 220px;
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 8px;
+  background : #fff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  /* margin-bottom: 10px; */
-  padding-top: 20px;
-  left: 190px;
   border: none;
-  position: fixed;
-  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 `;
 const CategoryFont = styled.div`
-  margin-bottom: 20px;
-  font-size: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
   font-weight: bold;
 `;
 const List = styled.div`
   display: flex;
-  /* align-items: center; */
   justify-content: center;
   flex-direction: column;
   background-color: transparent;
   border: none;
-  /* font-weight: bold; */
-  font-size: 18px;
-  padding: 15px;
+  font-size: 15px;
   width: 180px;
-  /* margin-top: 10px; */
+  margin-bottom: 6px;
+  margin-left : 10px;
   cursor: pointer;
+
 `;
 const SmallLists = styled.div`
   display: ${(props) => (props.isopen === "true" ? "flex" : "none")};
   flex-direction: column;
-  /* align-items: center; */
   justify-content: center;
 `;
-const SmallList = styled.div`
-  font-size: 15px;
-  padding-top: 10px;
-  text-align: center;
-  border: none;
 
+const SmallList = styled.button`
+  font-size: 13px;
+  padding-top: 8px;
+  text-align: left;
+  margin-left: 14px;
+  border: none;
+  background : #fff;
   cursor: pointer;
 `;
 

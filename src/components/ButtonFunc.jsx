@@ -22,9 +22,8 @@ const ContentFunc = styled.div`
 const FunctionUl = styled.ul`
   /* background-color: yellow; */
   display: flex;
-  font-size: 35px;
+  font-size: 26px;
   margin: 20px 15px;
-  margin-left: auto;
   list-style: none;
 `;
 
@@ -43,12 +42,12 @@ const IconSpan = styled.span`
 `;
 
 const Icon = styled.img`
-  width: 35px;
-  height: 35px;
+  width: 23px;
+  height: 23px;
 `;
 
 const Likecount = styled.span`
-  font-weight: bold;
+  font-weight: 500;
   padding-top: 10px;
 `;
 

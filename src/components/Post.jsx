@@ -358,14 +358,17 @@ function Post() {
       </BcDiv>
       <button
         style={{
-          width: "220px",
-          height: "50px",
-          marginTop: "130px",
-          position: "fixed",
-          border: "none",
-          borderRadius: "15px",
-          fontWeight: "bold",
-          boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+
+          width :"220px",
+          marginBottom : "18px",
+          border : "none",
+          padding : "13px 0px",
+          fontSize : "14px",
+          background : "#5e5ee8",
+          color : "#fff",
+          borderRadius : "8px",
+          fontWeight : "500",
+
         }}
         onClick={postModalHandler}
       >

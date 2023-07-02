@@ -30,6 +30,13 @@ const firebaseConfig = {
   // messagingSenderId: "883829817146",
   // appId: "1:883829817146:web:a5591680b556d1b0025a03",
 
+  // apiKey: "AIzaSyAeW4pW7uq8VeZUnX1ge30l9H4ctDf66FM",
+  // authDomain: "hobbyist-af1b4.firebaseapp.com",
+  // projectId: "hobbyist-af1b4",
+  // storageBucket: "hobbyist-af1b4.appspot.com",
+  // messagingSenderId: "1023217966908",
+  // appId: "1:1023217966908:web:babb61a9bd484537bfc839"
+
   // 한희
   // apiKey: "AIzaSyAojcDu2jBPfdgiHohB7a6NS_EN5sqgXUE",
   // authDomain: "hobbyist-391107.firebaseapp.com",

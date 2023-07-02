@@ -18,17 +18,20 @@ import github from "../img/github.png";
 import google from "../img/google.png";
 
 const OpenBtn = styled.button`
-  font-size: 15px;
-  width: 130px;
-  height: 35px;
+  @media screen and (max-width: 1500px) {
+    margin-top: 10px;
+    max-width: 200px;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-right: 30px;
+  }
+  font-size: 16px;
+  width: 80px;
   border: none;
   border-radius: 10px;
   background-color: transparent;
+  letter-spacing: -1px;
   cursor: pointer;
-  &:hover {
-    color: #5e5ee8;
-    background-color: #e3e3f0;
-  }
 `;
 
 const BcDiv = styled.div`
@@ -60,7 +63,7 @@ const Stbtn = styled.button`
   border-style: none;
   right: 10px;
   top: 10px;
-  font-size: 17px;
+  font-size: 16px;
   cursor: pointer;
 `;
 
