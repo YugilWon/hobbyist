@@ -34,7 +34,7 @@ const BcDiv = styled.div`
 
 const StDiv = styled.div`
   width: 550px;
-  height: 400px;
+  height: 450px;
   z-index: 9999;
   position: fixed;
   top: 50%;
@@ -42,6 +42,9 @@ const StDiv = styled.div`
   transform: translate(-50%, -50%);
   background-color: white;
   border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Stbtn = styled.button`
@@ -61,25 +64,25 @@ const StForm = styled.form`
 const StH2 = styled.h2`
   color: #5e5ee8;
   font-size: 28px;
-  padding-top: 20px;
+  padding-top: 10px;
 `;
 
 const StNameInput = styled.input`
   width: 400px;
-  height: 40px;
+  height: 30px;
   background-color: #f5f3f3;
   border-style: none;
   border-radius: 8px;
-  padding-left: 15px;
+  padding: 10px;
 `;
 
-const StMemoInput = styled.input`
+const StMemoInput = styled.textarea`
   width: 400px;
-  height: 120px;
+  height: 100px;
   background-color: #f5f3f3;
   border-style: none;
   border-radius: 8px;
-  padding-left: 15px;
+  padding: 10px;
 `;
 
 const StLoginBtn = styled.button`
@@ -91,6 +94,7 @@ const StLoginBtn = styled.button`
   cursor: pointer;
   color: white;
   margin-bottom: 10px;
+  float: right;
 `;
 
 // 모달 디자인 //
@@ -227,7 +231,11 @@ function Profile() {
   // 수정
   const handleProfileEdit = async (params, downloadURL) => {
     try {
-      const downloadURL = await handleUpload();
+      let downloadURL = ""; // 사진이 없을 경우 빈 문자열로 초기화
+
+      if (selectedFile) {
+        downloadURL = await handleUpload();
+      }
 
       const querySnapshot = await getDocs(
         query(collection(db, "users"), where("uid", "==", params))

@@ -28,6 +28,7 @@ const OpenBtn = styled.button`
   font-size: 16px;
   width: 80px;
   border: none;
+  border-radius: 10px;
   background-color: transparent;
   letter-spacing: -1px;
   cursor: pointer;
@@ -38,7 +39,7 @@ const BcDiv = styled.div`
   top: 0;
   left: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10;
+  z-index: 30;
   width: 100%;
   height: 100%;
   display: ${(props) => (props.open ? "block" : "none")};
@@ -272,12 +273,12 @@ function SignIn() {
                   placeholder="패스워드를 입력하세요."
                 />
               </p>
-              {passwordverify && (
+              {passwordverify && password && (
                 <VerifyMessage invalid={passwordverify ? "true" : undefined}>
                   비밀번호가 8자리 미만입니다.
                 </VerifyMessage>
               )}
-              {!passwordverify && (
+              {!passwordverify && password && (
                 <VerifyMessage>8자리 이상입니다.</VerifyMessage>
               )}
               <p />

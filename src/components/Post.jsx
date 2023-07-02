@@ -10,6 +10,12 @@ import CategorySelect from "../components/CategorySelect/CategorySelect";
 import SubcategorySelect from "../components/CategorySelect/SubcategorySlect";
 import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
 
+const StH1 = styled.h1`
+  color: #5e5ee8;
+  font-size: 20px;
+  text-align: center;
+`;
+
 const BcDiv = styled.div`
   position: fixed;
   top: 0;
@@ -24,11 +30,19 @@ const BcDiv = styled.div`
 const TitleInput = styled.input`
   width: 400px;
   height: 30px;
+  border-radius: 5px;
+  padding: 10px;
+  border: none;
+  background-color: #f5f5f5;
 `;
 
-const BodyInput = styled.input`
+const BodyInput = styled.textarea`
   width: 400px;
   height: 200px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+  background-color: #f5f5f5;
 `;
 
 const StDiv = styled.div`
@@ -56,6 +70,24 @@ const Stbtn = styled.button`
   cursor: pointer;
 `;
 
+const StSubmitBtn = styled.button`
+  background-color: #5e5ee8;
+  border: none;
+  border-radius: 5px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  cursor: pointer;
+  float: right;
+  &:hover {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const FileSelector = styled.input`
+  display: inline-block;
+`;
+
 const generateRandomNickname = () => {
   const adjectiveList = [
     "행복한 ",
@@ -76,12 +108,10 @@ export { generateRandomNickname };
 
 const categoryOptions = [
   { value: "", label: "카테고리를 선택해주세요!" },
+  { value: "경제", label: "경제" },
+  { value: "애완동식물", label: "애완동.식물" },
   { value: "여행", label: "여행" },
   { value: "음악", label: "음악" },
-  { value: "경제", label: "경제" },
-  { value: "스포츠", label: "스포츠" },
-  { value: "영화", label: "영화" },
-  { value: "게임", label: "게임" },
   { value: "기타", label: "기타" },
 ];
 
@@ -90,7 +120,7 @@ const subcategoryOptions = {
     { value: "", label: "카테고리를 선택해주세요!" },
     { value: "국내여행", label: "국내여행" },
     { value: "해외여행", label: "해외여행" },
-    { value: "기타여향", label: "기타여행" },
+    { value: "기타여행", label: "기타여행" },
   ],
 
   음악: [
@@ -100,34 +130,19 @@ const subcategoryOptions = {
     { value: "기타음악", label: "기타음악" },
   ],
 
+  애완동식물: [
+    { value: "", label: "카테고리를 선택해주세요!" },
+    { value: "꿀팁", label: "꿀팁" },
+    { value: "쇼핑", label: "쇼핑" },
+    { value: "기타정보", label: "기타정보" },
+  ],
+
   경제: [
     { value: "", label: "카테고리를 선택해주세요!" },
     { value: "주식", label: "주식" },
     { value: "가상화폐", label: "가상화폐" },
     { value: "부동산", label: "부동산" },
     { value: "기타 경제", label: "기타 경제" },
-  ],
-
-  스포츠: [
-    { value: "", label: "카테고리를 선택해주세요!" },
-    { value: "축구", label: "축구" },
-    { value: "야구", label: "야구" },
-    { value: "농구", label: "농구" },
-    { value: "기타 스포츠", label: "기타 스포츠" },
-  ],
-
-  영화: [
-    { value: "", label: "카테고리를 선택해주세요!" },
-    { value: "국내영화", label: "국내영화" },
-    { value: "해외영화", label: "해외영화" },
-    { value: "기타영화", label: "기타영화" },
-  ],
-
-  게임: [
-    { value: "", label: "카테고리를 선택해주세요!" },
-    { value: "온라인게임", label: "온라인게임" },
-    { value: "콘솔게임", label: "콘솔게임" },
-    { value: "기타게임", label: "기타게임" },
   ],
 
   기타: [
@@ -299,15 +314,7 @@ function Post() {
       <BcDiv open={open} onClick={postModalHandler}>
         <StDiv onClick={(e) => e.stopPropagation()}>
           <form>
-            <h1>글 작성하기</h1>
-            <p>
-              <TitleInput
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="제목을 입력해주세요."
-              />
-            </p>
+            <StH1>글 작성하기</StH1>
             <p>
               <CategorySelect
                 value={category}
@@ -324,6 +331,15 @@ function Post() {
                 />
               </p>
             )}
+
+            <p>
+              <TitleInput
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="제목을 입력해주세요."
+              />
+            </p>
             <p>
               <BodyInput
                 type="text"
@@ -333,15 +349,16 @@ function Post() {
               />
             </p>
             <p>
-              <input type="file" onChange={handleFileSelect} />
+              <FileSelector type="file" onChange={handleFileSelect} />
             </p>
-            <button onClick={handlePostSubmit}>등록</button>
+            <StSubmitBtn onClick={handlePostSubmit}>등록</StSubmitBtn>
           </form>
           <Stbtn onClick={postModalHandler}>x</Stbtn>
         </StDiv>
       </BcDiv>
       <button
         style={{
+
           width :"220px",
           marginBottom : "18px",
           border : "none",
@@ -351,10 +368,11 @@ function Post() {
           color : "#fff",
           borderRadius : "8px",
           fontWeight : "500",
+
         }}
         onClick={postModalHandler}
       >
-        글쓰기버튼
+        글 작성하기
       </button>
     </>
   );

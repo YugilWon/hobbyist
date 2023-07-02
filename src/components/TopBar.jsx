@@ -70,8 +70,8 @@ const BtnContainer = styled.div`
 const TopButton = styled.button`
   font-size: 16px;
   width: 90px;
+
   border: none;
-  background-color: transparent;
   cursor: pointer;
   @media screen and (max-width: 1500px) {
     margin-top: 5px;
@@ -106,7 +106,7 @@ function TopBar({ onSearch }) {
           {/* <Form onSubmit={handleSearch}> 
             <Input
               type="text"
-              placeholder="검색 가능합니다."
+              placeholder="검색어를 입력하세요."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             ></Input>
@@ -117,6 +117,7 @@ function TopBar({ onSearch }) {
           <TopButton>
             <FaGlobe/> KR
           </TopButton>
+
           <SignIn />
           <SignUp />
         </BtnContainer>

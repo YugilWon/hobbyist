@@ -2,6 +2,7 @@ import React from "react";
 import { styled } from "styled-components";
 import { useState } from "react";
 import { subcategoryOptions } from "./MyPost";
+import Weather from "./Weather";
 import Post from "./Post";
 
 const SidebarWrap = styled.div`
@@ -21,7 +22,7 @@ const CategoryFont = styled.div`
   font-size: 16px;
   font-weight: bold;
 `;
-const List = styled.button`
+const List = styled.div`
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -31,12 +32,15 @@ const List = styled.button`
   width: 180px;
   margin-bottom: 6px;
   margin-left : 10px;
+  cursor: pointer;
+
 `;
 const SmallLists = styled.div`
-  display: ${(props) => (props.isOpen ? "flex" : "none")};
+  display: ${(props) => (props.isopen === "true" ? "flex" : "none")};
   flex-direction: column;
   justify-content: center;
 `;
+
 const SmallList = styled.button`
   font-size: 13px;
   padding-top: 8px;
@@ -44,10 +48,10 @@ const SmallList = styled.button`
   margin-left: 14px;
   border: none;
   background : #fff;
+  cursor: pointer;
 `;
 
-function SideBar2() {
-  console.log(subcategoryOptions);
+function SideBar2({ setSelectedSubcategory }) {
   const initialallLists = [
     {
       id: 1,
@@ -86,56 +90,84 @@ function SideBar2() {
     },
   ];
 
-  // const [isOpen, setIsOpen] = useState(false);
-  // const handleList = () => {
-  //   setIsOpen(!isOpen);
-  // };
+  const [allLists, setAllLists] = useState(initialallLists);
 
   const handleList = (id) => {
     const updatedLists = allLists.map((item) => {
       if (item.id === id) {
         return {
           ...item,
-          isOpen: !item.isOpen,
+          isopen: !item.isopen,
         };
       }
-      return item;
+
+      return {
+        ...item,
+        isopen: false,
+      };
     });
     setAllLists(updatedLists);
   };
 
-  const [allLists, setAllLists] = useState(initialallLists);
+  const handleSubcategory = (subcategory) => {
+    const cleanSubcategory = subcategory.substring(2).trim();
+    setSelectedSubcategory(cleanSubcategory);
+    console.log(cleanSubcategory);
+  };
 
   return (
-    <SidebarWrap>
-      <Post/>
-    <AllList>
-      <CategoryFont>♞ Category</CategoryFont>
-      {allLists.map((allList) => {
-        return (
-          <List
-            className="큰목차"
-            key={allList.id}
-            onClick={() => handleList(allList.id)}
-          >
-            <div>{allList.list}</div>
-            <SmallLists className="작은목차" isOpen={allList.isOpen}>
-              {allLists.map((subList, i) => {
-                if (allList.sublist[i]) {
-                  return (
-                    allList.sublist.length > 0 && (
-                      <SmallList key={i}>{allList.sublist[i]}</SmallList>
-                    )
-                  );
-                }
-                return null;
-              })}
-            </SmallLists>
-          </List>
-        );
-      })}
-    </AllList>
-    </SidebarWrap>
+    <>
+      <Post />
+      <AllList>
+        <CategoryFont>♞ Category</CategoryFont>
+        {allLists.map((allList) => {
+          return (
+            <List
+              className="큰목차"
+              key={allList.id}
+              onClick={() => handleList(allList.id)}
+            >
+              <div>{allList.list}</div>
+              <SmallLists className="작은목차" isOpen={allList.isOpen}>
+                {allLists.map((subList, i) => {
+                  if (allList.sublist[i]) {
+                    return (
+                      allList.sublist.length > 0 && (
+                        <SmallList key={i}>{allList.sublist[i]}</SmallList>
+                      )
+                    );
+                  }
+                  return null;
+                })}
+              </SmallLists>
+            </List>
+          );
+        })}
+      </AllList>
+      <Weather />
+      <button
+        style={{
+          width: "50px",
+          height: "50px",
+          position: "fixed",
+          bottom: "50px",
+          right: "80px",
+          borderRadius: "30px",
+          border: "none",
+          cursor: "pointer",
+          boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+        }}
+        onClick={() => {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
+      >
+        Top
+      </button>
+    </>
+
   );
 }
 export default SideBar2;

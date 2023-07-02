@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom";
 import MainBtnFunc from "./MainBtnFunc";
 import google from "../img/google.png";
 import { FaSistrix, FaGlobe } from "react-icons/fa";
+import SideBar2 from "./SideBar2";
+
 
 const AllContents = styled.div`
    
@@ -35,7 +37,15 @@ const Input = styled.input`
 `;
 
 const Main = styled.main`
-  margin-bottom: 36px;
+
+  padding: 20px;
+  background: #eee;
+  width: 600px;
+  margin-top: 150px;
+  margin-left: 100px;
+  border-radius: 20px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+
 `;
 const MainInner = styled.div`
   margin-bottom: 20px;
@@ -73,6 +83,8 @@ function Contents() {
   const [posts, setPosts] = useState([]);
   const [, setUsers] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedSubcategory] = useState(null);
+  const [subcategory, setSubcategory] = useState(null);
 
   //db에서 유저 데이터 불러오는 함수
   const fetchUsers = async () => {
@@ -141,12 +153,24 @@ function Contents() {
 
   const navigate = useNavigate();
 
+  // 검색어와 카테고리에 따라 필터링하는 함수
   const filterPosts = () => {
+    let filteredPosts = posts;
+
     if (searchQuery) {
-      return posts.filter((post) => post.title.includes(searchQuery));
-    } else {
-      return posts;
+      filteredPosts = filteredPosts.filter((post) =>
+        post.title.includes(searchQuery)
+      );
     }
+
+    if (subcategory) {
+      console.log(selectedSubcategory);
+      filteredPosts = filteredPosts.filter(
+        (post) => post.subcategory === subcategory
+      );
+    }
+
+    return filteredPosts;
   };
 
   const handleSearch1 = (e) => {
@@ -159,6 +183,7 @@ function Contents() {
     <>
     {/* <TopBar onSearch={handleSearch} /> */}
     <AllContents>
+
     <Form onSubmit={handleSearch1}> 
             <Input
               type="text"
@@ -168,7 +193,9 @@ function Contents() {
             ></Input>
             <FaSistrix size="20" color="gray"></FaSistrix>
           </Form>
+      <TopBar onSearch={handleSearch} />
       <div style={{ width: "650px" }}>
+        {console.log(subcategory)}
         {filterPosts().map((post) => {
           return (
             <Main key={post.CID}>
@@ -177,7 +204,16 @@ function Contents() {
                     navigate(`/mypage/${post.uid}`);
                   }}
                 >
-                  <UserImg src={post.img ? post.img : google} alt="" />
+                  <div
+                    style={{
+                      width: "45px",
+                      height: "45px",
+                      borderRadius: "70%",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <UserImg src={post.img ? post.img : google} alt="" />
+                  </div>
                   <User>{post.nickname}</User>
                 </MainUser>
               <MainInner>

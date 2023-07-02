@@ -22,6 +22,7 @@ export const Input = styled.input`
   border-style: none;
   border-radius: 8px;
   padding-left: 15px;
+  position: relative;
 `;
 
 export const Button = styled.button`
@@ -30,9 +31,12 @@ export const Button = styled.button`
 `;
 
 export const TopButton = styled.button`
-  font-size: 16px;
-  width: 120px;
+
+  font-size: 15px;
+  width: 130px;
+  height: 35px;
   border: none;
+  border-radius: 10px;
   background-color: transparent;
   cursor: pointer;
 `;
@@ -92,6 +96,8 @@ export const VerifyMessage = styled.span`
 `;
 
 export const StSelect = styled.select`
-  width: 400px;
+  width: 420px;
   height: 30px;
+  border: none;
+  background-color: #f5f5f5;
 `;

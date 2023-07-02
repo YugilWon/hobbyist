@@ -85,7 +85,7 @@ function BookedPost() {
                 width: "240px",
                 height: "80px",
               }}
-              src={post.downloadURL}
+              src={post.downloadURL ? post.downloadURL : null}
               alt=""
             ></img>
             <ContentBody>

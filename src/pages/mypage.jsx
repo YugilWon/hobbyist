@@ -8,10 +8,9 @@ import BookedPost from "../components/BookedPost";
 const MypageLayout = styled.div`
   padding: 30px;
   display: flex;
-  /* flex-direction: row;
-  overflow: hidden; */
   justify-content: center;
   gap : 20px;
+
 `;
 
 const MyContents = styled.div`
