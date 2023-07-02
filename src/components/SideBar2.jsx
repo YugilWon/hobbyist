@@ -50,7 +50,7 @@ const SmallList = styled.button`
 `;
 
 function SideBar2() {
-  console.log(subcategoryOptions);
+  // console.log(subcategoryOptions);
   const initialallLists = [
     {
       id: 1,

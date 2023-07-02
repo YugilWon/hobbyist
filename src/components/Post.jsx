@@ -9,6 +9,8 @@ import { auth, storage } from "../service/firebase";
 import CategorySelect from "../components/CategorySelect/CategorySelect";
 import SubcategorySelect from "../components/CategorySelect/SubcategorySlect";
 import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
+import { useDispatch } from "react-redux";
+import { addPost } from "../redux/modules/feed";
 
 const BcDiv = styled.div`
   position: fixed;
@@ -144,12 +146,13 @@ function Post() {
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
+  const dispatch = useDispatch();
 
   const fetchData = async () => {
     try {
       const querySnapshot = await getDocs(collection(db, "posts"));
       querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
+        // console.log(`${doc.id} => ${doc.data()}`);
       });
     } catch (error) {
       console.error("Error fetching data: ", error);
@@ -276,6 +279,8 @@ function Post() {
         category,
         subcategory,
       };
+
+      dispatch(addPost(newPost));
 
       const docRef = await addDoc(collection(db, "posts"), newPost);
       console.log("Post added with ID: ", docRef.id);

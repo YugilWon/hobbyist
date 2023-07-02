@@ -6,6 +6,9 @@ import { db } from "../service/firebase";
 import { useNavigate } from "react-router-dom";
 import MainBtnFunc from "./MainBtnFunc";
 import google from "../img/google.png";
+import { useSelector, useDispatch } from "react-redux";
+import { setPosts } from "../redux/modules/feed";
+import { setUsers } from "../redux/modules/user";
 
 const AllContents = styled.div`
   margin-left: 200px;
@@ -45,9 +48,10 @@ const ContentsBox = styled.div`
 
 function Contents() {
   const [, setComments] = useState([]);
-  const [posts, setPosts] = useState([]);
-  const [, setUsers] = useState();
   const [searchQuery, setSearchQuery] = useState("");
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.feed);
+  const users = useSelector((state) => state.user);
 
   //db에서 유저 데이터 불러오는 함수
   const fetchUsers = async () => {
@@ -59,8 +63,7 @@ function Contents() {
         id: doc.id,
         ...doc.data(),
       }));
-
-      setUsers(fetchedUsers);
+      dispatch(setUsers(fetchedUsers));
       console.log(fetchedUsers);
     } catch (error) {
       console.error("Error fetching comments:", error);
@@ -99,7 +102,8 @@ function Contents() {
         id: doc.id,
         ...doc.data(),
       }));
-      setPosts(fetchedPosts);
+
+      dispatch(setPosts(fetchedPosts));
     } catch (error) {
       console.error("Error fetching posts:", error);
     }
@@ -123,7 +127,6 @@ function Contents() {
       return posts;
     }
   };
-
   return (
     <AllContents>
       <TopBar onSearch={handleSearch} />

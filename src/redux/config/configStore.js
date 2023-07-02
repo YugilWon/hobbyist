@@ -2,9 +2,12 @@
 import { createStore, combineReducers } from "redux";
 import feed from "../modules/feed";
 import comments from "../modules/comments";
+import user from "../modules/user";
 
 const rootReducer = combineReducers({
-  feed,comments
+  feed,
+  comments,
+  user,
 });
 const store = createStore(rootReducer);
 

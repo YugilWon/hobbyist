@@ -112,13 +112,13 @@ function SignIn() {
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      console.log("user", user);
+      // console.log("user", user);
     });
   }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      console.log("user", user);
+      // console.log("user", user);
       setLogin(user ? "로그아웃" : "로그인");
     });
     return () => unsubscribe();

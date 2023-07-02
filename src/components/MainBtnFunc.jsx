@@ -10,6 +10,8 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { setPosts } from "../redux/modules/feed";
 
 const ContentFunc = styled.div`
   display: flex;
@@ -20,9 +22,7 @@ const ContentFunc = styled.div`
 
 const FunctionUl = styled.ul`
   /* background-color: yellow; */
-  /* width: 100%; */
   display: flex;
-  /* justify-content: space-between; */
   font-size: 25px;
   margin: 20px 15px;
   margin-left: auto;
@@ -64,9 +64,10 @@ const TextArea = styled.textarea`
 
 // 데이터 가져오기
 function MainBtnFunc(props) {
-  const [, setPosts] = useState([]);
   const [post, setPost] = useState([]);
   const id = props.id;
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.feed);
 
   const fetchData = async () => {
     const q = query(collection(db, "posts"));
@@ -75,9 +76,9 @@ function MainBtnFunc(props) {
     querySnapshot.forEach((doc) => {
       initialPosts.push({ id: doc.id, ...doc.data() });
     });
-    setPosts(initialPosts);
+    dispatch(setPosts(initialPosts));
 
-    const postData = initialPosts.find((item) => item.id === id);
+    const postData = posts.find((item) => item.id === id);
     setPost(postData);
   };
 
@@ -175,6 +176,7 @@ function MainBtnFunc(props) {
   };
 
   //id 별 북마크 여부 확인
+  // console.log("post", post);
   const bookedByUsers = post.bookedByUsers;
   const isBookedByUser =
     bookedByUsers && bookedByUsers.hasOwnProperty(getCurrentUserUid());

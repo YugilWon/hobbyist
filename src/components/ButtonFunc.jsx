@@ -11,6 +11,8 @@ import {
   doc,
   getDoc,
 } from "firebase/firestore";
+import { useSelector, useDispatch } from "react-redux";
+import { setPosts } from "../redux/modules/feed";
 
 const ContentFunc = styled.div`
   display: flex;
@@ -63,9 +65,10 @@ const TextArea = styled.textarea`
 
 // 데이터 가져오기
 function ButtonFunc() {
-  const [, setPosts] = useState([]);
   const [post, setPost] = useState([]);
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const posts = useSelector((state) => state.feed);
 
   const fetchData = async () => {
     const q = query(collection(db, "posts"));
@@ -74,7 +77,7 @@ function ButtonFunc() {
     querySnapshot.forEach((doc) => {
       initialPosts.push({ id: doc.id, ...doc.data() });
     });
-    setPosts(initialPosts);
+    dispatch(setPosts(initialPosts));
 
     const postData = initialPosts.find((item) => item.id === id);
     setPost(postData);
