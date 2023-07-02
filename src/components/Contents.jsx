@@ -110,7 +110,6 @@ function Contents() {
   };
 
   useEffect(() => {
-    console.log("피드데이터 호출");
     fetchPosts();
   }, []);
 

@@ -11,7 +11,7 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { useSelector, useDispatch } from "react-redux";
-import { setPosts } from "../redux/modules/feed";
+import { setPosts, toggleLike, toggleBookmark } from "../redux/modules/feed";
 
 const ContentFunc = styled.div`
   display: flex;
@@ -132,7 +132,7 @@ function MainBtnFunc(props) {
     } else {
       alert("로그인이 필요합니다.");
     }
-
+    // dispatch(toggleLike(post.id)); // 좋아요 상태 업데이트
     fetchData(); // 데이터 갱신
   };
   const likesByUser = post && post.likesByUser;
@@ -171,12 +171,11 @@ function MainBtnFunc(props) {
     } else {
       alert("로그인이 필요합니다.");
     }
-
+    // dispatch(toggleBookmark(post.id));
     fetchData(); // 데이터 갱신
   };
 
   //id 별 북마크 여부 확인
-  // console.log("post", post);
   const bookedByUsers = post.bookedByUsers;
   const isBookedByUser =
     bookedByUsers && bookedByUsers.hasOwnProperty(getCurrentUserUid());
@@ -184,7 +183,7 @@ function MainBtnFunc(props) {
   // url 복사
   const copyUrlRef = useRef(null);
 
-  const copyUrl = (postId) => {
+  const copyUrl = () => {
     if (!document.queryCommandSupported("copy")) {
       return alert("복사 기능이 지원되지 않는 브라우저입니다.");
     }
