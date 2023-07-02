@@ -159,7 +159,7 @@ function Detail() {
   const getCurrentUserUid = () => {
     const auth = getAuth();
     const currentUser = auth.currentUser;
-    console.log("현재 로그인 된 아이디", currentUser);
+
     if (currentUser) {
       return currentUser.uid;
     } else {
@@ -183,7 +183,6 @@ function Detail() {
 
   // 닉네임 불러오는 함수
   const getNickname = async (uid, email) => {
-    console.log(uid);
     try {
       const q = query(collection(db, "users"), where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
@@ -256,6 +255,7 @@ function Detail() {
         createdAt: new Date(),
         nickname: fetchedNickname,
         postId: postId,
+        uid: uid,
       };
 
       await addDoc(collection(db, "Comments"), newComment);
@@ -300,6 +300,12 @@ function Detail() {
     }
   };
 
+  const isCommentAuthor = (uid) => {
+    const currentUserUid = getCurrentUserUid();
+    console.log(currentUserUid);
+    return currentUserUid === uid;
+  };
+
   const filteredPosts = posts.filter((post) => post.id === id);
   const filteredComments = comments.filter((comment) => comment.postId === id);
 
@@ -334,7 +340,8 @@ function Detail() {
                             <CommentUserDiv>
                               <UserComment>{item.comment}</UserComment>
                               <div>
-                                {editCommentId === item.CID ? (
+                                {isCommentAuthor(item.uid) &&
+                                editCommentId === item.CID ? (
                                   <>
                                     <input
                                       type="text"
@@ -351,7 +358,7 @@ function Detail() {
                                       완료
                                     </Btn>
                                   </>
-                                ) : (
+                                ) : isCommentAuthor(item.uid) ? (
                                   <>
                                     <Btn
                                       onClick={() => setEditCommentId(item.CID)}
@@ -366,7 +373,7 @@ function Detail() {
                                       삭제
                                     </Btn>
                                   </>
-                                )}
+                                ) : null}
                               </div>
                             </CommentUserDiv>
                           </div>
