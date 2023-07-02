@@ -2,6 +2,8 @@ import React from "react";
 import { styled } from "styled-components";
 import { useState } from "react";
 import { subcategoryOptions } from "./MyPost";
+import Weather from "./Weather";
+import Post from "./Post";
 
 const AllList = styled.button`
   margin-top: 200px;
@@ -18,6 +20,7 @@ const AllList = styled.button`
   left: 190px;
   border: none;
   position: fixed;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
 `;
 const CategoryFont = styled.div`
   margin-bottom: 20px;
@@ -118,35 +121,58 @@ function SideBar2({ setSelectedSubcategory }) {
   };
 
   return (
-    <AllList>
-      <CategoryFont>♞ Category</CategoryFont>
-      {allLists.map((allList) => {
-        return (
-          <List
-            className="큰목차"
-            key={allList.id}
-            onClick={() => handleList(allList.id)}
-          >
-            <div>{allList.list}</div>
-            <SmallLists
-              className="작은목차"
-              isopen={allList.isopen ? "true" : "false"}
+    <>
+      <Post />
+      <AllList>
+        <CategoryFont>♞ Category</CategoryFont>
+        {allLists.map((allList) => {
+          return (
+            <List
+              className="큰목차"
+              key={allList.id}
+              onClick={() => handleList(allList.id)}
             >
-              {allList.sublist.map((subListItem, i) => {
-                return (
-                  <SmallList
-                    key={i}
-                    onClick={() => handleSubcategory(subListItem)}
-                  >
-                    {subListItem}
-                  </SmallList>
-                );
-              })}
-            </SmallLists>
-          </List>
-        );
-      })}
-    </AllList>
+              <div>{allList.list}</div>
+              <SmallLists className="작은목차" isOpen={allList.isOpen}>
+                {allLists.map((subList, i) => {
+                  if (allList.sublist[i]) {
+                    return (
+                      allList.sublist.length > 0 && (
+                        <SmallList key={i}>{allList.sublist[i]}</SmallList>
+                      )
+                    );
+                  }
+                  return null;
+                })}
+              </SmallLists>
+            </List>
+          );
+        })}
+      </AllList>
+      <Weather />
+      <button
+        style={{
+          width: "50px",
+          height: "50px",
+          position: "fixed",
+          bottom: "50px",
+          right: "80px",
+          borderRadius: "30px",
+          border: "none",
+          cursor: "pointer",
+          boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+        }}
+        onClick={() => {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
+      >
+        Top
+      </button>
+    </>
+
   );
 }
 export default SideBar2;

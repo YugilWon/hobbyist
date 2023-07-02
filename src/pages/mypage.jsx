@@ -13,10 +13,6 @@ const MypageLayout = styled.div`
 
   display: flex;
   flex-direction: row;
-
-  height: 1000px;
-
-  overflow: hidden;
 `;
 
 const MyContents = styled.div`
