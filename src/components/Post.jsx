@@ -10,6 +10,12 @@ import CategorySelect from "../components/CategorySelect/CategorySelect";
 import SubcategorySelect from "../components/CategorySelect/SubcategorySlect";
 import { getDownloadURL, uploadBytes, ref } from "firebase/storage";
 
+const StH1 = styled.h1`
+  color: #5e5ee8;
+  font-size: 20px;
+  text-align: center;
+`;
+
 const BcDiv = styled.div`
   position: fixed;
   top: 0;
@@ -24,11 +30,19 @@ const BcDiv = styled.div`
 const TitleInput = styled.input`
   width: 400px;
   height: 30px;
+  border-radius: 5px;
+  padding: 10px;
+  border: none;
+  background-color: #f5f5f5;
 `;
 
-const BodyInput = styled.input`
+const BodyInput = styled.textarea`
   width: 400px;
   height: 200px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+  background-color: #f5f5f5;
 `;
 
 const StDiv = styled.div`
@@ -54,6 +68,24 @@ const Stbtn = styled.button`
   top: 10px;
   font-size: 17px;
   cursor: pointer;
+`;
+
+const StSubmitBtn = styled.button`
+  background-color: #5e5ee8;
+  border: none;
+  border-radius: 5px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  cursor: pointer;
+  float: right;
+  &:hover {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+`;
+
+const FileSelector = styled.input`
+  display: inline-block;
 `;
 
 const generateRandomNickname = () => {
@@ -299,15 +331,7 @@ function Post() {
       <BcDiv open={open} onClick={postModalHandler}>
         <StDiv onClick={(e) => e.stopPropagation()}>
           <form>
-            <h1>글 작성하기</h1>
-            <p>
-              <TitleInput
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="제목을 입력해주세요."
-              />
-            </p>
+            <StH1>글 작성하기</StH1>
             <p>
               <CategorySelect
                 value={category}
@@ -324,6 +348,15 @@ function Post() {
                 />
               </p>
             )}
+
+            <p>
+              <TitleInput
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="제목을 입력해주세요."
+              />
+            </p>
             <p>
               <BodyInput
                 type="text"
@@ -333,9 +366,9 @@ function Post() {
               />
             </p>
             <p>
-              <input type="file" onChange={handleFileSelect} />
+              <FileSelector type="file" onChange={handleFileSelect} />
             </p>
-            <button onClick={handlePostSubmit}>등록</button>
+            <StSubmitBtn onClick={handlePostSubmit}>등록</StSubmitBtn>
           </form>
           <Stbtn onClick={postModalHandler}>x</Stbtn>
         </StDiv>

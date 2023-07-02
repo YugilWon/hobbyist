@@ -13,7 +13,7 @@ const Header = styled.header`
   left: 0;
   right: 0;
 
-  height: 75px;
+  height: 50px;
   padding: 1rem;
   background-color: white;
   font-weight: bold;
@@ -56,20 +56,11 @@ const Input = styled.input`
 const BtnContainer = styled.div`
   margin-left: 50%;
   display: flex;
-
-  @media screen and (max-width: 1500px) {
-    flex-direction: row;
-    align-items: flex-start;
-    margin-left: 30%;
-    margin-right: auto;
-    margin-top: 10px;
-  }
 `;
 const TopButton = styled.button`
-  font-size: 20px;
-  width: 120px;
+  font-size: 15px;
+  width: 600px;
   border: none;
-  background-color: transparent;
   cursor: pointer;
   &:hover {
     transform: scale(1.2);
@@ -103,22 +94,19 @@ function TopBar({ onSearch }) {
               navigate(`/`);
             }}
           >
-            <img src={logo} alt="" style={{ width: "200px" }} />
+            <img src={logo} alt="" style={{ width: "160px" }} />
           </Logo>
           <Form onSubmit={handleSearch}>
             <FaSistrix size="20" color="gray"></FaSistrix>
             <Input
               type="text"
-              placeholder="검색 가능합니다."
+              placeholder="검색어를 입력하세요."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             ></Input>
           </Form>
         </LogoInput>
         <BtnContainer>
-          <TopButton>
-            <FaGlobe style={{ marginRight: "5px" }} /> KR
-          </TopButton>
           <SignIn />
           <SignUp />
         </BtnContainer>

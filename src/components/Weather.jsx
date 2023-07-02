@@ -2,20 +2,18 @@ import React, { useEffect, useState } from "react";
 import { styled } from "styled-components";
 
 const StDiv = styled.div`
+  position: fixed;
   top: 140px;
   right: 90px;
   background-image: linear-gradient(315deg, #654ea3 0%, #eaafc8 74%);
-
   color: white;
   height: 100px;
   width: 220px;
   border-radius: 20px;
-  position: absolute;
   text-align: center;
   padding: 10px;
-  display: flex;
+  z-index: 0;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  position: fixed;
 `;
 
 function Weather() {
@@ -83,7 +81,7 @@ function Weather() {
       >
         {Math.ceil(temp - 273.15)}°C
       </p>
-      <p style={{ position: "absolute", top: "0", top: "45px" }}>{name}</p>
+      <p style={{ position: "absolute", top: "45px" }}>{name}</p>
       <p style={{ position: "absolute", bottom: "0", let: "0" }}>{humidity}%</p>
       <p
         style={{

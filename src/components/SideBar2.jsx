@@ -2,6 +2,8 @@ import React from "react";
 import { styled } from "styled-components";
 import { useState } from "react";
 import { subcategoryOptions } from "./MyPost";
+import Weather from "./Weather";
+import Post from "./Post";
 
 const AllList = styled.button`
   margin-top: 200px;
@@ -111,32 +113,57 @@ function SideBar2() {
   const [allLists, setAllLists] = useState(initialallLists);
 
   return (
-    <AllList>
-      <CategoryFont>♞ Category</CategoryFont>
-      {allLists.map((allList) => {
-        return (
-          <List
-            className="큰목차"
-            key={allList.id}
-            onClick={() => handleList(allList.id)}
-          >
-            <div>{allList.list}</div>
-            <SmallLists className="작은목차" isOpen={allList.isOpen}>
-              {allLists.map((subList, i) => {
-                if (allList.sublist[i]) {
-                  return (
-                    allList.sublist.length > 0 && (
-                      <SmallList key={i}>{allList.sublist[i]}</SmallList>
-                    )
-                  );
-                }
-                return null;
-              })}
-            </SmallLists>
-          </List>
-        );
-      })}
-    </AllList>
+    <>
+      <Post />
+      <AllList>
+        <CategoryFont>♞ Category</CategoryFont>
+        {allLists.map((allList) => {
+          return (
+            <List
+              className="큰목차"
+              key={allList.id}
+              onClick={() => handleList(allList.id)}
+            >
+              <div>{allList.list}</div>
+              <SmallLists className="작은목차" isOpen={allList.isOpen}>
+                {allLists.map((subList, i) => {
+                  if (allList.sublist[i]) {
+                    return (
+                      allList.sublist.length > 0 && (
+                        <SmallList key={i}>{allList.sublist[i]}</SmallList>
+                      )
+                    );
+                  }
+                  return null;
+                })}
+              </SmallLists>
+            </List>
+          );
+        })}
+      </AllList>
+      <Weather />
+      <button
+        style={{
+          width: "50px",
+          height: "50px",
+          position: "fixed",
+          bottom: "50px",
+          right: "80px",
+          borderRadius: "30px",
+          border: "none",
+          cursor: "pointer",
+          boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+        }}
+        onClick={() => {
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth",
+          });
+        }}
+      >
+        Top
+      </button>
+    </>
   );
 }
 export default SideBar2;

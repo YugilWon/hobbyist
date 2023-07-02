@@ -39,6 +39,12 @@ const MyContents = styled.div`
   height: 90%;
 `;
 
+const StH1 = styled.h1`
+  color: #5e5ee8;
+  font-size: 20px;
+  text-align: center;
+`;
+
 const ListContainer = styled.div`
   background-color: #efefea;
   height: 20%;
@@ -96,11 +102,19 @@ const BcDiv = styled.div`
 const TitleInput = styled.input`
   width: 400px;
   height: 30px;
+  border-radius: 5px;
+  padding: 10px;
+  border: none;
+  background-color: #f5f5f5;
 `;
 
-const BodyInput = styled.input`
+const BodyInput = styled.textarea`
   width: 400px;
   height: 200px;
+  border-radius: 10px;
+  padding: 10px;
+  border: none;
+  background-color: #f5f5f5;
 `;
 
 const StDiv = styled.div`
@@ -126,6 +140,20 @@ const Stbtn = styled.button`
   top: 10px;
   font-size: 17px;
   cursor: pointer;
+`;
+
+const StSubmitBtn = styled.button`
+  background-color: #5e5ee8;
+  border: none;
+  border-radius: 5px;
+  width: 100px;
+  height: 30px;
+  color: white;
+  cursor: pointer;
+  float: right;
+  &:hover {
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
 `;
 
 const categoryOptions = [
@@ -331,7 +359,7 @@ function MyPost() {
                   width: "300px",
                   height: "100px",
                 }}
-                src={post.downloadURL}
+                src={post.downloadURL ? post.downloadURL : null}
                 alt=""
               ></img>
               <ContentBody>
@@ -355,7 +383,7 @@ function MyPost() {
               <BcDiv open={open} onClick={postModalHandler}>
                 <StDiv onClick={(e) => e.stopPropagation()}>
                   <form>
-                    <h1>글 작성하기</h1>
+                    <StH1>글 수정하기</StH1>
                     <p>
                       <TitleInput
                         type="text"
@@ -391,14 +419,14 @@ function MyPost() {
                     <p>
                       <input type="file" onChange={handleFileSelect} />
                     </p>
-                    <button
+                    <StSubmitBtn
                       onClick={(event) => {
                         event.preventDefault(); // 기본 동작인 새로고침을 막음
                         handlePostEdit(modalCID);
                       }}
                     >
                       수정
-                    </button>
+                    </StSubmitBtn>
                   </form>
                   <Stbtn onClick={postModalHandler}>x</Stbtn>
                 </StDiv>

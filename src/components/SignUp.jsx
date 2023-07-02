@@ -7,6 +7,7 @@ import {
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+import { styled } from "styled-components";
 
 import {
   Input,
@@ -21,6 +22,22 @@ import {
 } from "./styledcomponents/Styled";
 
 import { collection, addDoc, getFirestore } from "firebase/firestore";
+
+const CheckId = styled.button`
+  background-color: transparent;
+  border-radius: 6px;
+  width: 70px;
+  height: 40px;
+  border: none;
+  color: #343434;
+  cursor: pointer;
+  position: absolute;
+  right: 60px;
+  &:hover {
+    color: #5e5ee8;
+    background-color: #dfdff7;
+  }
+`;
 
 function SignUp() {
   const [isModalOpen2, setIsModalOpen2] = useState(false);
@@ -179,7 +196,7 @@ function SignUp() {
                 onChange={emailChangeHandler}
                 placeholder="아이디 (이메일 주소)"
               />
-              <Button onClick={verifyEmailHandler}>중복확인</Button>
+              <CheckId onClick={verifyEmailHandler}>중복확인</CheckId>
               <p>
                 <Input
                   className="Password-Input"
@@ -189,12 +206,12 @@ function SignUp() {
                   placeholder="비밀번호"
                 />
                 <br />
-                {passwordverify && (
+                {passwordverify && password && (
                   <VerifyMessage invalid={passwordverify ? "true" : undefined}>
                     비밀번호가 8자리 미만입니다.
                   </VerifyMessage>
                 )}
-                {!passwordverify && (
+                {!passwordverify && password && (
                   <VerifyMessage>8자리 이상입니다.</VerifyMessage>
                 )}
               </p>
