@@ -151,7 +151,7 @@ const EditBtn = styled.button`
   position: absolute;
   top: 13px;
   right: 13px;
-  z-index: 100;
+  z-index: 1;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   margin-left: auto;

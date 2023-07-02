@@ -125,19 +125,20 @@ function Contents() {
   const filterPosts = () => {
     let filteredPosts = posts;
 
-    if (searchQuery) {
+    if (searchQuery && clicksubcategory && clicksubcategory !== "처음으로") {
+      filteredPosts = filteredPosts.filter(
+        (post) =>
+          post.title.includes(searchQuery) &&
+          post.subcategory === clicksubcategory
+      );
+    } else if (searchQuery) {
       filteredPosts = filteredPosts.filter((post) =>
         post.title.includes(searchQuery)
       );
-    }
-    if (clicksubcategory) {
+    } else if (clicksubcategory && clicksubcategory !== "처음으로") {
       filteredPosts = filteredPosts.filter(
         (post) => post.subcategory === clicksubcategory
       );
-
-      if (clicksubcategory === "처음으로") {
-        return posts;
-      }
     }
 
     return filteredPosts;
