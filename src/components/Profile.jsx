@@ -97,47 +97,43 @@ const StLoginBtn = styled.button`
 
 const ProfileContainer = styled.div`
   background-color: white;
-  width: 500px;
-  height: 600px;
-
+  width: 320px;
+  height: 450px;
   border-radius: 20px;
-
   display: flex;
   align-items: center;
   flex-direction: column;
-
-  box-shadow: 0px 1px 5px gray;
+  box-shadow: 0px 0px 2px gray;
 `;
 
 const MyDiv = styled.div`
   background-color: gray;
   border-radius: 70%;
-  width: 250px;
-  height: 250px;
+  width: 150px;
+  height: 150px;
   overflow: hidden;
   margin-top: 20px;
   margin-bottom: 10px;
 `;
 
 const NameContainer = styled.div`
-  padding-left: 10px;
-  margin-bottom: 40px;
+  display : flex;
+  padding-left: 25px;
+  margin-bottom: 20px;
 `;
 
 const MyName = styled.span`
-  font-size: 30px;
+  font-size: 24px;
   font-weight: bold;
   margin-right: 10px;
 `;
 
 const IntroduceMe = styled.div`
   background-color: #f5f5f5;
-  width: 80%;
+  width: 85%;
   height: 180px;
   padding: 10px;
-
-  display: flex;
-  flex-direction: row;
+  margin-bottom: 20px;
 `;
 
 const EditBtn = styled.button`
@@ -315,8 +311,8 @@ function Profile() {
         <NameContainer>
           <MyName>{users}</MyName>
           <EditBtn
-            width="30px"
-            height="30px"
+            width="25px"
+            height="25px"
             onClick={profileModalHandler}
             currentuserid={currentUserId}
             params={params}

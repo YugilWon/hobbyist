@@ -2,51 +2,48 @@ import React from "react";
 import { styled } from "styled-components";
 import { useState } from "react";
 import { subcategoryOptions } from "./MyPost";
+import Post from "./Post";
 
+const SidebarWrap = styled.div`
+    position: sticky; left: 0; top: 100px;
+`
 const AllList = styled.button`
-  margin-top: 200px;
-  /* height: 540px; */
   width: 220px;
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 8px;
+  background : #fff;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  /* margin-bottom: 10px; */
-  padding-top: 20px;
   border: none;
-  position: fixed;
 `;
 const CategoryFont = styled.div`
-  margin-bottom: 20px;
-  font-size: 20px;
+  margin-bottom: 10px;
+  font-size: 16px;
   font-weight: bold;
 `;
 const List = styled.button`
   display: flex;
-  /* align-items: center; */
   justify-content: center;
   flex-direction: column;
   background-color: transparent;
   border: none;
-  /* font-weight: bold; */
-  font-size: 18px;
-  padding: 15px;
+  font-size: 15px;
   width: 180px;
-  /* margin-top: 10px; */
+  margin-bottom: 6px;
+  margin-left : 10px;
 `;
 const SmallLists = styled.div`
   display: ${(props) => (props.isOpen ? "flex" : "none")};
   flex-direction: column;
-  /* align-items: center; */
   justify-content: center;
 `;
 const SmallList = styled.button`
-  font-size: 15px;
-  padding-top: 10px;
+  font-size: 13px;
+  padding-top: 8px;
   text-align: left;
+  margin-left: 14px;
   border: none;
+  background : #fff;
 `;
 
 function SideBar2() {
@@ -110,6 +107,8 @@ function SideBar2() {
   const [allLists, setAllLists] = useState(initialallLists);
 
   return (
+    <SidebarWrap>
+      <Post/>
     <AllList>
       <CategoryFont>♞ Category</CategoryFont>
       {allLists.map((allList) => {
@@ -136,6 +135,7 @@ function SideBar2() {
         );
       })}
     </AllList>
+    </SidebarWrap>
   );
 }
 export default SideBar2;

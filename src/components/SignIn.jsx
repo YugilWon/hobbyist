@@ -25,15 +25,12 @@ const OpenBtn = styled.button`
     align-items: flex-start;
     margin-right: 30px;
   }
-  margin-top: 4px;
-  font-size: 20px;
-  width: 120px;
+  font-size: 16px;
+  width: 80px;
   border: none;
   background-color: transparent;
+  letter-spacing: -1px;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.2);
-  }
 `;
 
 const BcDiv = styled.div`
@@ -65,7 +62,7 @@ const Stbtn = styled.button`
   border-style: none;
   right: 10px;
   top: 10px;
-  font-size: 17px;
+  font-size: 16px;
   cursor: pointer;
 `;
 

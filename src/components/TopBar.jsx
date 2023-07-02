@@ -8,46 +8,48 @@ import SignIn from "./SignIn";
 import logo from "../img/logo.png";
 
 const Header = styled.header`
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
-  right: 0;
-
-  height: 75px;
-  padding: 1rem;
+  width: 100%;
   background-color: white;
   font-weight: bold;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  z-index: 1;
+`;
+const HeaderInner = styled.div`
+  width: 1100px;
   display: flex;
+  justify-content: center;
   align-items: center;
-
-  box-shadow: 1px 1px 5px gray;
+  margin: 0 auto;
+  padding: 20px 0px;
 `;
 const LogoInput = styled.div`
   display: flex;
-  flex-direction: row;
+  align-items: center;
 `;
 
 const Logo = styled.h1`
-  font-size: 50px;
   color: #5e5ee8;
-  margin-left: 20px;
-  margin-right: 20px;
+  margin-right: 30px;
   cursor: pointer;
 `;
 
 const Form = styled.form`
   display: flex;
-  margin-top: 11%;
-
+  width :250px;
   border: none;
+  align-items : center;
   border-radius: 20px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  height: 2%;
+  padding: 0px 10px;
 `;
 
 const Input = styled.input`
+width :100%;
   border: none;
+  outline : none;
   border-radius: 20px;
   height: 30px;
   padding-left: 10px;
@@ -56,7 +58,7 @@ const Input = styled.input`
 const BtnContainer = styled.div`
   margin-left: 50%;
   display: flex;
-
+  align-items : center;
   @media screen and (max-width: 1500px) {
     flex-direction: row;
     align-items: flex-start;
@@ -66,21 +68,16 @@ const BtnContainer = styled.div`
   }
 `;
 const TopButton = styled.button`
-  font-size: 20px;
-  width: 120px;
+  font-size: 16px;
+  width: 90px;
   border: none;
   background-color: transparent;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.2);
-  }
-
   @media screen and (max-width: 1500px) {
     margin-top: 5px;
     width: 100%;
     max-width: 200px;
   }
-
   height: 30px;
 `;
 
@@ -97,31 +94,33 @@ function TopBar({ onSearch }) {
   return (
     <>
       <Header>
+        <HeaderInner>
         <LogoInput>
           <Logo
             onClick={() => {
               navigate(`/`);
             }}
           >
-            <img src={logo} alt="" style={{ width: "200px" }} />
+            <img src={logo} alt="" style={{ width: "150px" }} />
           </Logo>
-          <Form onSubmit={handleSearch}>
-            <FaSistrix size="20" color="gray"></FaSistrix>
+          {/* <Form onSubmit={handleSearch}> 
             <Input
               type="text"
               placeholder="검색 가능합니다."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             ></Input>
-          </Form>
+            <FaSistrix size="20" color="gray"></FaSistrix>
+          </Form> */}
         </LogoInput>
         <BtnContainer>
           <TopButton>
-            <FaGlobe style={{ marginRight: "5px" }} /> KR
+            <FaGlobe/> KR
           </TopButton>
           <SignIn />
           <SignUp />
         </BtnContainer>
+        </HeaderInner>
       </Header>
     </>
   );

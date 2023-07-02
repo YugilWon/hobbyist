@@ -30,14 +30,11 @@ export const Button = styled.button`
 `;
 
 export const TopButton = styled.button`
-  font-size: 20px;
+  font-size: 16px;
   width: 120px;
   border: none;
   background-color: transparent;
   cursor: pointer;
-  &:hover {
-    transform: scale(1.2);
-  }
 `;
 
 export const ModalContainer = styled.div`

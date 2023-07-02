@@ -6,42 +6,67 @@ import { db } from "../service/firebase";
 import { useNavigate } from "react-router-dom";
 import MainBtnFunc from "./MainBtnFunc";
 import google from "../img/google.png";
+import { FaSistrix, FaGlobe } from "react-icons/fa";
 
 const AllContents = styled.div`
-  margin-left: 200px;
+   
+`
+
+const Form = styled.form`
+  display: flex;
+  border: none;
+  width: 98%;
+  border-radius: 25px;
+  box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.3);
+  padding: 3px 10px;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fff;
+  margin: 0px auto 40px auto;
+`;
+
+const Input = styled.input`
+  border: none;
+  border-radius: 20px;
+  width: 100%;
+  height: 30px;
+  outline: none;
+  padding-left: 10px;
 `;
 
 const Main = styled.main`
-  padding: 20px;
-  background: #eee;
-  width: 600px;
-  margin-top: 150px;
-  margin-left: 100px;
+  margin-bottom: 36px;
 `;
 const MainInner = styled.div`
   margin-bottom: 20px;
+  border-radius: 14px;
+  background: #fff;
 `;
 const MainUser = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 16px 0px;
+  margin-bottom: 14px;
   cursor: pointer;
 `;
 const UserImg = styled.img`
-  width: 48px;
+  width: 38px;
+  border-radius: 25px;
 `;
 const User = styled.h3`
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 18px;
+  font-weight: 500;
   letter-spacing: -1px;
 `;
 const ContentsBox = styled.div`
-  background: #fff;
-  border-radius: 10px;
-  padding: 20px;
+  padding : 16px 20px 26px 20px;
   cursor: pointer;
 `;
+const PostTitle = styled.h2`
+  font-size : 22px;
+  font-weight : 600;
+  margin-bottom : 26px;
+`
 
 function Contents() {
   const [, setComments] = useState([]);
@@ -124,15 +149,30 @@ function Contents() {
     }
   };
 
+  const handleSearch1 = (e) => {
+    console.log("제출이 일어남", searchQuery);
+    e.preventDefault();
+    // onSearch(searchQuery);
+  };
+
   return (
+    <>
+    {/* <TopBar onSearch={handleSearch} /> */}
     <AllContents>
-      <TopBar onSearch={handleSearch} />
+    <Form onSubmit={handleSearch1}> 
+            <Input
+              type="text"
+              placeholder="검색 가능합니다."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            ></Input>
+            <FaSistrix size="20" color="gray"></FaSistrix>
+          </Form>
       <div style={{ width: "650px" }}>
         {filterPosts().map((post) => {
           return (
             <Main key={post.CID}>
-              <MainInner>
-                <MainUser
+              <MainUser
                   onClick={() => {
                     navigate(`/mypage/${post.uid}`);
                   }}
@@ -140,12 +180,13 @@ function Contents() {
                   <UserImg src={post.img ? post.img : google} alt="" />
                   <User>{post.nickname}</User>
                 </MainUser>
+              <MainInner>
                 <ContentsBox
                   onClick={() => {
                     navigate(`/detail/${post.id}`);
                   }}
                 >
-                  <h2>{post.title}</h2>
+                  <PostTitle>{post.title}</PostTitle>
                   <img
                     style={{
                       width: "100%",
@@ -163,6 +204,7 @@ function Contents() {
         })}
       </div>
     </AllContents>
+    </>
   );
 }
 export default Contents;
