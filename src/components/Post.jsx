@@ -91,8 +91,8 @@ const generateRandomNickname = () => {
     "행복한 ",
     "용감한 ",
     "사나운 ",
-    "최고의 ",
-    "똑똑한 ",
+    "배고픈 ",
+    "배부른 ",
     "섹시한 ",
   ];
   const nounList = ["홍정기", "최원장", "안동훈", "예병수", "류명한"];
@@ -179,7 +179,6 @@ function Post() {
     await uploadBytes(imageRef, selectedFile);
 
     const downloadURL = await getDownloadURL(imageRef);
-    console.log("downloadURL", downloadURL);
 
     setDownloadURL(downloadURL);
 
@@ -200,7 +199,6 @@ function Post() {
 
   //닉네임 가져오는 함수
   const getNickname = async (uid) => {
-    console.log(uid);
     try {
       const q = query(collection(db, "users"), where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
@@ -220,7 +218,6 @@ function Post() {
 
   //img 가져오는 함수
   const getImg = async (uid) => {
-    console.log(uid);
     try {
       const q = query(collection(db, "users"), where("uid", "==", uid));
       const querySnapshot = await getDocs(q);
@@ -275,7 +272,6 @@ function Post() {
       };
 
       const docRef = await addDoc(collection(db, "posts"), newPost);
-      console.log("Post added with ID: ", docRef.id);
       setTitle("");
       setBody("");
       setSelectedFile(null);

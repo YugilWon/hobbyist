@@ -8,7 +8,6 @@ function App() {
     <>
       <div>
         <TopBar />
-
         <div
           style={{
             display: "flex",

@@ -73,7 +73,6 @@ function Mypage() {
       <TopBar />
       <MypageLayout>
         <Profile />
-
         <MyContents>
           <MyButton
             ref={myPost}

@@ -11,9 +11,7 @@ import {
 } from "firebase/auth";
 
 import { doc, setDoc, getDoc } from "firebase/firestore";
-
 import { VerifyMessage } from "./styledcomponents/Styled";
-
 import github from "../img/github.png";
 import google from "../img/google.png";
 import { generateRandomNickname } from "./Post";
@@ -345,5 +343,4 @@ function SignIn() {
     </>
   );
 }
-
 export default SignIn;
