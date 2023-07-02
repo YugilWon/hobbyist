@@ -39,6 +39,7 @@ const List = styled.div`
   width: 180px;
   margin-bottom: 6px;
   margin-left: 10px;
+  cursor: pointer;
 `;
 const SmallLists = styled.div`
   display: ${(props) => (props.isopen === "true" ? "flex" : "none")};
@@ -52,6 +53,7 @@ const SmallList = styled.div`
   text-align: left;
   margin-left: 14px;
   border: none;
+  cursor: pointer;
   background: #fff;
 `;
 
