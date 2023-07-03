@@ -61,7 +61,6 @@ function BookedPost() {
       }));
 
       setBookPost(fetchedPosts);
-      console.log(fetchedPosts);
     } catch (error) {
       console.error("Error fetching comments:", error);
     }

@@ -21,13 +21,13 @@ const firebaseConfig = {
 export const signInWithGoogle = () => {
   const googleProvider = new GoogleAuthProvider();
 
-  return signInWithPopup(getAuth(app), googleProvider);
+  return signInWithPopup(auth, googleProvider);
 };
 
 export const signInWithGithub = () => {
   const githubProvider = new GithubAuthProvider();
 
-  return signInWithPopup(getAuth(app), githubProvider);
+  return signInWithPopup(auth, githubProvider);
 };
 
 export const app = initializeApp(firebaseConfig);

@@ -24,7 +24,6 @@ function FileUpload({ setDownloadURL }) {
     await uploadBytes(imageRef, selectedFile);
 
     const downloadURL = await getDownloadURL(imageRef);
-    console.log("downloadURL", downloadURL);
 
     setDownloadURL(downloadURL);
     return downloadURL;

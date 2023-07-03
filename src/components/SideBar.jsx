@@ -132,8 +132,15 @@ function SideBar() {
     setAllLists(updatedLists);
   };
 
+  function removeEmojis(text) {
+    const regex =
+      /[\uD800-\uDBFF][\uDC00-\uDFFF]|\u200D|\uFE0F|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|\uDB40[\uDD00-\uDDEF]/g;
+    return text.replace(regex, "");
+  }
+
   const handleSubcategory = (subcategory) => {
-    const cleanSubcategory = subcategory.substring(2).trim();
+    const cleanSubcategory = removeEmojis(subcategory.replace(/\s/g, ""));
+    console.log(cleanSubcategory);
     dispatch(addCategory(cleanSubcategory));
   };
 

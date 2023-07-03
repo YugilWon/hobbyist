@@ -88,7 +88,6 @@ const DeleteBtn = styled.button`
 `;
 
 // 모달디자인
-
 const BcDiv = styled.div`
   position: fixed;
   top: 0;
@@ -191,7 +190,6 @@ export const subcategoryOptions = {
     { value: "", label: "카테고리를 선택해주세요!" },
     { value: "🚅 국내여행", label: "국내여행" },
     { value: "🛩️ 해외여행", label: "해외여행" },
-    { value: "🗺️ 기타여행", label: "기타여행" },
     { value: "🔎 처음으로", label: "처음으로" },
   ],
 
@@ -220,9 +218,7 @@ function MyPost() {
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [modalCID, setModalCID] = useState("");
-
   const navigate = useNavigate();
-
   const params = useParams();
 
   //피드 정보 불러오는 함수
@@ -332,8 +328,6 @@ function MyPost() {
       return;
     }
 
-    console.log(post.CID);
-
     setOpen(!open);
 
     await fetchMyposts();
@@ -352,7 +346,6 @@ function MyPost() {
   };
 
   const currentUserId = auth.currentUser.uid;
-  console.log(currentUserId);
 
   return (
     <>
