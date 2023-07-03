@@ -113,7 +113,7 @@ function Contents() {
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+  }, [posts]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
