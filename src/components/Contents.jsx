@@ -144,7 +144,7 @@ function Contents() {
     return filteredPosts;
   };
 
-  //무한스크롤 부분 기능은 구현했으나 아이콘버튼과의 연동 에러로 주석처리
+  // // 무한스크롤 부분 기능은 구현했으나 아이콘버튼과의 연동 에러로 주석처리
   // const [data, setData] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
 
@@ -186,7 +186,11 @@ function Contents() {
 
   return (
     <AllContents>
-      <Form onSubmit={handleSearch}>
+      <Form
+        onSubmit={(e) => {
+          handleSearch();
+        }}
+      >
         <Input
           type="text"
           placeholder="검색 가능합니다."
